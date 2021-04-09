@@ -29,7 +29,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/products">
+                            <a class="nav-link" href="{{ url('/admin/products') }}">
                                 <span data-feather="shopping-cart"></span>
                                 Show Products
                             </a>

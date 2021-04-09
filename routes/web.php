@@ -11,24 +11,29 @@
 |
 */
 
+// use Illuminate\Routing\Route;
+
 Route::get('/', 'ProductController@show');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get( '/products/{id}' , 'ProductController@showsingle' );
+Route::get('/products/{id}', 'ProductController@showsingle');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/', 'AdminController@dashboard');
+        Route::get('/products', 'AdminController@show');
+
+        Route::get('/products/create', 'ProductController@create');
+
+        Route::post('/products', 'ProductController@store');
+
+        Route::delete('/products/{id}', 'ProductController@destroy');
 
 
-Route::get('/admin', 'AdminController@dashboard');
-Route::get('/admin/products', 'AdminController@show');
+        Route::get('/products', 'ProductController@index');
+    });
+});
 
-Route::get('/admin/products/create', 'ProductController@create');
-
-Route::post('/admin/products', 'ProductController@store');
-
-Route::get( 'admin/products' , 'ProductController@index' );
-
-
-
-
-
+Route::post( '/products/cart/{id}' , 'CartController@store' );

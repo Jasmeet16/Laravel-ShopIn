@@ -21,7 +21,14 @@
                     <td >{{$product->name}}</td>
                     <td>{{ $product->price}}</td>
                     <td>{{$product->qty}}</td>
-                    <td>sit</td>
+                    <td>  
+                      <form action="{{'products'}}/{{$product->id}}" method="POST">
+
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                      <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                    </form>
+                    </td>
                   </tr>
                   @endforeach()
                 

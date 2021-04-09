@@ -18,7 +18,7 @@ class AdminAuth
     public function handle($request, Closure $next)
     {
         if( Auth::user()->admin == false ){
-            return redirect('/home')->with('message' , 'only admin can acces the page');
+            return redirect('/')->with('message' , 'only admin can access the page');
         }
         return $next($request);
     }
