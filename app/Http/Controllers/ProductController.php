@@ -100,7 +100,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $products = Product::all();
+        $products = Product::paginate(6);
         return view( 'home' , compact('products') );
     }
 

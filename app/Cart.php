@@ -10,6 +10,6 @@ class Cart extends Model
     protected $guarded =[];
 
     public function product(){
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\Product');
       }
 }

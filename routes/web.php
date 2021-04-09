@@ -37,3 +37,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::post( '/products/cart/{id}' , 'CartController@store' );
+Route::get( 'cart' , 'CartController@index' );

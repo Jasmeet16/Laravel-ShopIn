@@ -38,7 +38,7 @@
         .navbar a:hover {
             color: whitesmoke;
         }
-        
+
 
         main {
             min-height: 75vh;
@@ -64,29 +64,39 @@
                     </a>
                 </div>
             @else
-            <ul class="buttons">
-                <li >
-                    @if(Auth::user()->admin)
-                    <a href="{{ url('/admin') }}"  role="button" aria-expanded="false">
-                        Dashboard
-                    </a>
-                    @else
-                    <a href="{{ url('/') }}"  role="button" aria-expanded="false">
-                        {{Auth::user()->email}}
-                    </a>
-                    @endif
-                        
-                </li>
-                <li >
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                    
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                <ul class="buttons">
+                    <li>
+                        @if (Auth::user()->admin)
+                            <a href="{{ url('/admin') }}" role="button" aria-expanded="false">
+                                Dashboard
+                            </a>
+                        @else
+                            <a href="{{ url('/') }}" role="button" aria-expanded="false">
+                                {{ Auth::user()->email }}
+                            </a>
+                            <strong>
+                                <a href="{{ url('/cart') }}" role="button" aria-expanded="false">
+                                    Cart
+                                </a>
+                            </strong>
 
-                    
-                </li>
-            </ul>
+                        @endif
+
+                    </li>
+                    <li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                        <strong>
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+
+                        </strong>
+
+
+
+                    </li>
+                </ul>
             @endif
             <script src="{{ asset('js/app.js') }}"></script>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
+use App\Product;
 use App\Cart as AppCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,24 @@ class CartController extends Controller
 
     public function index()
     {
-        //
+        // userid -> cartitems
+        // cartitems -> prodid
+        // prodid -> prod
+
+        $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
+
+
+        // dd($items);
+        $products = [];
+        foreach( $items as $item ){
+            $products[] =  Product::where( 'id' , $item->product_id );
+        }
+        // dd($items);
+        
+
+        //dd($products);
+
+        return view('user.cart' , compact('products'));
     }
 
     /**
