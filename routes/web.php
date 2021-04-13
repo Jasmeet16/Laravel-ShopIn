@@ -11,7 +11,10 @@
 |
 */
 
-// use Illuminate\Routing\Route;
+
+
+use App\Http\Controllers\OrderController;
+
 
 Route::get('/', 'ProductController@show');
 
@@ -38,3 +41,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::post( '/products/cart/{id}' , 'CartController@store' );
 Route::get( 'cart' , 'CartController@index' );
+
+Route::delete( 'cart/{id}' , 'CartController@destroy' );
+ Route::post( 'cart/{id}' ,'CartController@update' );
+
+ Route::get( 'cart/checkout/profile' ,'ProfileController@create' );
+ Route::post( '/profile' ,'ProfileController@store' );
+
+ Route::post('/orders', 'OrderController@store' );

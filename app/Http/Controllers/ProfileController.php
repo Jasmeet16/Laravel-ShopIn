@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Profile;
+use Faker\Provider\bg_BG\PhoneNumber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -24,7 +26,10 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        //
+        if(  Auth::user()->profile()->get()->isNotEmpty() ){
+            return view('user.checkout');
+        } 
+        return view('user.profile');
     }
 
     /**
@@ -34,8 +39,30 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+     {
+
+     
+    if(  Auth::user()->profile()->get()->isNotEmpty() ){
+        return redirect('/checkout');
+    }
+
+        $this->validate($request, [
+            'name' => 'required',
+            'phone' => 'required|numeric',
+            'address' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
+        ]);
+
+        $completeAddress = $request->address . $request->state .$request->zip;
+
+        Profile::create([
+            'user_id' => Auth::user()->id,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $completeAddress,
+        ]);
+        return redirect('/checkout');
     }
 
     /**

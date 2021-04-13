@@ -29,7 +29,6 @@ class CartController extends Controller
 
         $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
 
-
         // dd($items);
         $products = [];
         foreach( $items as $item ){
@@ -37,12 +36,43 @@ class CartController extends Controller
         }
         // dd($items);
         
-
         //dd($products);
 
         return view('user.cart' , compact('products'));
     }
 
+    //custom functions
+
+    public function total(){
+        $total = 0;
+        $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
+
+        foreach( $items as $item ){
+            $product =  Product::where( 'id' , $item->product_id )->get();
+            $total += $product[0]->price * $item->qty;
+        }
+        return $total;
+    }
+    public function selectedQty($id){
+       
+        $item = Cart::where( 'product_id' , $id)->get();
+    
+        return $item[0]->qty;
+    }
+
+    public function inCart($id){
+       
+        $item = Cart::where( [ 'product_id' => $id ,  'user_id' => Auth::user()->id ])->get();
+        //dd( $item->isEmpty());
+        if( $item->isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    public function getProduct($id){
+        $item = Product::where('id' , $id )->get();
+        return $item;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -99,9 +129,11 @@ class CartController extends Controller
      * @param  \App\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, cart $cart)
+    public function update(Request $request,  $id)
     {
-        //
+        // dd($request->qty);
+        Auth::user()->cart->where('product_id' , $id)->update(['qty' => $request->qty ]);
+        return redirect()->back();
     }
 
     /**
@@ -110,8 +142,12 @@ class CartController extends Controller
      * @param  \App\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(cart $cart)
+    public function destroy($id)
     {
-        //
+        $prod = Auth::user()->cart()->where( 'product_id' , $id )->get();
+        // $items = Cart::where( 'user_id' ,Auth::user()->id )->get();
+        //dd($prod);
+         Cart::destroy($prod[0]->id);
+         return redirect()->back();
     }
 }

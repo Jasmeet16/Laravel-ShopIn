@@ -17,8 +17,8 @@ class ProductSeder extends Seeder
             Product::create([
                 'name' =>  'Product' . $i,
                 'description' => $des,
-                'price' => rand(100,10000),
-                'qty' => $i * 10,
+                'price' => $i*10,
+                'qty' =>  10,
                 'image' => 'https://picsum.photos/id/' . $i .'/200/200'
             ]);
         }

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-
+@inject('cart', 'App\Http\Controllers\CartController')
 @section('content')
 
     <div class="album py-5 bg-light">
@@ -14,10 +14,15 @@
                             <button class='btn btn-dark w-100 py-3'> Buy Now </button>
                         </div>
                         <div class="col-md-6">
+                            @if ( $cart->inCart($product->id) )
+                            <button class='btn btn-dark w-100 py-3' type="submit" disabled>Product Already Present in Cart</button>
+                            @else
                             <form action="cart/{{$product->id}}" method="POST">
                                 {{csrf_field()}}
                                 <button class='btn btn-dark w-100 py-3' type="submit">Add To Cart</button>
                             </form>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
@@ -28,19 +33,20 @@
                             <h3> {{ $product->name }} </h3>
                         </li>
                         <li class="py-3 list-group-item">
+                            <span> <strong> Price :  </strong> </span>
+                            <span> ₹ {{ $product->price }} </span>
+                        </li>
+                        <li class="py-3 list-group-item">
+                            <span> <strong> Number of items in stock : </strong> </span>
+                            <span> {{ $product->qty }} </span>
+                        </li>
+                        <li class="py-3 list-group-item">
                             <p> <strong> Description </strong> </p>
                             <p> {{ $product->description }} </p>
                         </li>
-                        <li class="py-3 list-group-item">
-                            <span> <strong> Quantity : </strong> </span>
-                            <span> {{ $product->qty }} </span>
-                        </li>
                     </ul>
-
                 </div>
-
             </div>
         </div>
     </div>
-
 @endsection
