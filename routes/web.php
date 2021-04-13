@@ -13,6 +13,7 @@
 
 
 
+
 use App\Http\Controllers\OrderController;
 
 
@@ -49,3 +50,4 @@ Route::delete( 'cart/{id}' , 'CartController@destroy' );
  Route::post( '/profile' ,'ProfileController@store' );
 
  Route::post('/orders', 'OrderController@store' );
+ Route::get('/orders', 'OrderController@index' );

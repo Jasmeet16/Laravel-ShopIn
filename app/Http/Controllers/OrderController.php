@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -14,7 +15,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::where(  'user_id' , Auth::user()->id )->get();
+        return view('user.orders' , compact('orders'));
     }
 
     /**
@@ -35,7 +37,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        //dd( Auth::user()->cart()->get() );
+        foreach( Auth::user()->cart()->get() as $item ){
+            Order::create([
+                'user_id' =>  Auth::user()->id,
+                'product_id' => $item->product_id,
+                'qty' => $item->qty
+            ]);
+        }
+        Auth::user()->cart()->delete();
+        return view('user.congratulation');
     }
 
     /**

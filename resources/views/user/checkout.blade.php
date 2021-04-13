@@ -52,11 +52,7 @@
                         <li class="py-3 list-group-item">
                             <form action="/orders" method="POST">
                                 {{ csrf_field() }}
-                                @foreach (Auth::user()->cart()->get() as $item)
-                                    <input type="hidden"  name="product_id" value="{{$item->product_id}}">
-                                    <input type="hidden"  name="qty" value="{{$item->qty}}">
-                                @endforeach
-                                <button class="btn btn-dark w-100 py-3" type="submit"> Proceed</button>
+                                <button class="btn btn-dark w-100 py-3" type="submit"  > Proceed</button>
                             </form>
                              
                             

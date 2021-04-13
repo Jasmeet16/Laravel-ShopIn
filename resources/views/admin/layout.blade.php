@@ -11,18 +11,6 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/admin/products">
-                                <span data-feather="home"></span>
-                                Dashboard <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file"></span>
-                                Orders
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/admin/products/create">
                                 <span data-feather="shopping-cart"></span>
                                 Add Product
@@ -34,21 +22,15 @@
                                 Show Products
                             </a>
                         </li>
-
                     </ul>
-
-
                 </div>
             </nav>
-
             @yield('content')
-
         </div>
     </div>
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
-
     </script>
     @include('layouts.footer')
 

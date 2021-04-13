@@ -9,7 +9,9 @@
                         <li class="py-3 list-group-item">
                             <h2> Shopping Cart </h2>
                         </li>
-                        
+                        @if (count($products) == 0)
+                        <div class="alert alert-danger"> Cart is empty</div>
+                        @endif
                         @foreach ($products as $product)
                         {{-- {{ dd($product) }} --}}
                             <li class="py-3 list-group-item d-flex justify-content-between align-items-center">
@@ -49,8 +51,14 @@
                             
                         </li>
                         <li class="py-3 list-group-item">
-                            <button class="btn btn-dark w-100 py-3" type="submit"> <a href="{{url('/cart/checkout/profile')}}">Proceed</a></button>
+                            <a type="button" class="btn btn-dark w-100 py-3 <?php if( $cart->total() == 0 ) echo 'disabled'; ?>" href="{{url('/cart/checkout/profile')}}"  >Proceed</a>
                         </li>
+                    </ul>
+                    <ul class="list-group py-3">
+                        <li class="py-3 list-group-item">
+                            <a type="button" class="btn btn-dark w-100 py-3" href="{{url('/orders')}}">MyOrders</a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>

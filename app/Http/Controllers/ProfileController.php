@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Profile;
 use Faker\Provider\bg_BG\PhoneNumber;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+      
     }
 
     /**
@@ -62,7 +63,7 @@ class ProfileController extends Controller
             'phone' => $request->phone,
             'address' => $completeAddress,
         ]);
-        return redirect('/checkout');
+        return redirect('/cart/checkout/profile');
     }
 
     /**

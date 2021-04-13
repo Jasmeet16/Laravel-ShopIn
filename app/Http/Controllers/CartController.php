@@ -7,6 +7,7 @@ use App\Product;
 use App\Cart as AppCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CartController extends Controller
 {
@@ -96,8 +97,9 @@ class CartController extends Controller
             'product_id' => $id,
             'qty' => 1
         ]);
+        
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Product Added To Cart');;
     }
 
     /**
@@ -151,3 +153,5 @@ class CartController extends Controller
          return redirect()->back();
     }
 }
+
+

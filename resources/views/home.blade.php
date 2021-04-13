@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-
+@inject('cart', 'App\Http\Controllers\CartController')
 @section('content')
 
     <div class="album py-5 bg-light">
@@ -8,6 +8,9 @@
         <div class="container">
 
             <h3 class='mb-5'>Products Here</h3>
+            @if (\Session::has('success'))
+                <div class="alert alert-info">{!! \Session::get('success') !!}</div>
+            @endif
             <div class="row">
                 @foreach ($products->all() as $product)
                     <div class="col-md-4">
@@ -17,21 +20,23 @@
                             </a>
                             <div class="card-body">
                                 <h3 class="card-text">{{ $product->name }}</h3>
-                                @if ( Auth::user() )
-                                    
-                                @else
-                                    
-                                @endif
 
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <form action="products/cart/{{ $product->id }}" class='w-50' method="POST">
-                                        {{ csrf_field() }}
-                                        <button type="submit" class="btn btn-outline-secondary w-100">
-                                            Add To Cart
-                                        </button>
-                                    </form>
+                                    @if (!Auth::guest() && $cart->inCart($product->id))
+                                        <button class='btn btn-outline-secondary w-100' type="submit" disabled>Product
+                                            Already
+                                            Present in Cart</button>
+                                    @else
+                                        <form action="{{ url('products/cart/' . $product->id) }}" class="w-50" method="POST">
+                                            {{ csrf_field() }}
+                                            <button class='btn btn-outline-secondary w-100' type="submit">Add To
+                                                Cart</button>
+                                        </form>
+                                    @endif
 
-                                    <button type="button" class="btn btn-outline-secondary w-50">Buy Now</button>
+
+                                    <a href="{{ url('products/' . $product->id) }}" type="button"
+                                        class="btn btn-outline-secondary w-50">View Product</a>
                                 </div>
                             </div>
                         </div>

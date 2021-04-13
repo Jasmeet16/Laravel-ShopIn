@@ -14,7 +14,7 @@
                             <button class='btn btn-dark w-100 py-3'> Buy Now </button>
                         </div>
                         <div class="col-md-6">
-                            @if ( $cart->inCart($product->id) )
+                            @if ( !Auth::guest() && $cart->inCart($product->id) )
                             <button class='btn btn-dark w-100 py-3' type="submit" disabled>Product Already Present in Cart</button>
                             @else
                             <form action="cart/{{$product->id}}" method="POST">

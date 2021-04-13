@@ -31,7 +31,7 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="validationServer03">Address Line 1</label>
-                            <input type="text" class="form-control" id="validationServer03" name="address" placeholder="City" required>
+                            <input type="text" class="form-control" id="validationServer03" name="address" placeholder="Address" required>
                             <div class="invalid-feedback">
                                 Please provide a valid address.
                             </div>
