@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,6 +46,14 @@ class OrderController extends Controller
                 'qty' => $item->qty
             ]);
         }
+        
+        foreach( Auth::user()->cart()->get() as $item ){
+            $product = Product::find($item->product_id);
+            $product->qty = $product->qty - $item->qty;
+            
+            $product->save();
+        }
+
         Auth::user()->cart()->delete();
         return view('user.congratulation');
     }

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
 {
@@ -15,7 +18,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->get();
+        try {
+            $products = Product::latest()->get();
+        } catch (Exception $e) {
+            dd($e);
+        }
+
         return view('admin.products', compact('products'));
     }
 
@@ -49,17 +57,13 @@ class ProductController extends Controller
 
         // dd($request->all());
         //
-
-
-
         $extension = "." . $request->image->getClientOriginalExtension();
         $name = basename($request->image->getClientOriginalName(), $extension) . time();
         $name = $name . $extension;
         echo ($name);
 
-        
         // $path = $request->image->storeAs('uploads',$name);
-        Storage::disk('public')->putFileAs('uploads', $request->image , $name);
+        Storage::disk('public')->putFileAs('uploads', $request->image, $name);
 
         $path = '/uploads/' . $name;
 
@@ -82,13 +86,8 @@ class ProductController extends Controller
 
         // $product->save();
 
-
-
-
-
         $request->session('message', "product added successfully");
-        // 'email' => 'required|string|email|max:255|unique:users',
-        // 'password' => 'required|string|min:6|confirmed',
+
         return redirect('/admin');
     }
 
@@ -100,16 +99,30 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $products = Product::paginate(6);
-        return view( 'home' , compact('products') );
+        try {
+            $products = Product::paginate(6);
+        } catch (QueryException $e) {
+            // return view('errors.database' , [ 'error' => $e->getMessage() ] );   
+            return view('errors.database', ['error' => "Error connecting to database"]);
+        }
+        return view('home', compact('products'));
     }
 
 
     public function showsingle($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::findOrFail($id);
+        } catch (QueryException $e) {
+            // return view('errors.database' , [ 'error' => $e->getMessage() ] );   
+            return view('errors.database', ['error' => "Error connecting to database"]);
+        } catch (ModelNotFoundException $e) {
+            //dd($e->getMessage());
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
+
         // dd($product->name);
-        return view( 'product' , compact('product') );
+        return view('product', compact('product'));
     }
 
 
@@ -146,6 +159,6 @@ class ProductController extends Controller
     public function destroy($id)
     {
         Product::destroy($id);
-         return redirect()->back();
+        return redirect()->back();
     }
 }

@@ -40,10 +40,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
 });
 
-Route::post( '/products/cart/{id}' , 'CartController@store' );
-Route::get( 'cart' , 'CartController@index' );
+Route::post( '/products/cart' , 'CartController@store' );
+Route::get( '/cart' , 'CartController@index' );
 
-Route::delete( 'cart/{id}' , 'CartController@destroy' );
+Route::delete( 'cart' , 'CartController@destroy' );
+
  Route::post( 'cart/{id}' ,'CartController@update' );
 
  Route::get( 'cart/checkout/profile' ,'ProfileController@create' );

@@ -13,8 +13,7 @@
     
     
         <!-- Bootstrap core CSS -->
-        <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        
     <!-- Custom styles for this template -->
     <link href="/css/album.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">

@@ -29,16 +29,13 @@ class CartController extends Controller
         // prodid -> prod
 
         $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
-
         // dd($items);
         $products = [];
         foreach( $items as $item ){
             $products[] =  Product::where( 'id' , $item->product_id );
         }
-        // dd($items);
-        
+        // dd($items);  
         //dd($products);
-
         return view('user.cart' , compact('products'));
     }
 
@@ -90,16 +87,22 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id)
+    public function store( Request $request )
     {
-        Cart::create([
-            'user_id' => Auth::user()->id,
-            'product_id' => $id,
-            'qty' => 1
-        ]);
+        //dd($request->id);
+        try {
+            Cart::create([
+                'user_id' => Auth::user()->id,
+                'product_id' => $request->id,
+                'qty' => 1
+            ]);
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        
         
 
-        return redirect('/')->with('success', 'Product Added To Cart');;
+        return with('success', 'Product Added To Cart');
     }
 
     /**
@@ -144,13 +147,14 @@ class CartController extends Controller
      * @param  \App\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $prod = Auth::user()->cart()->where( 'product_id' , $id )->get();
+       /// dd( $request->id );
+        $prod = Auth::user()->cart()->where( 'product_id' , $request->id )->get();
         // $items = Cart::where( 'user_id' ,Auth::user()->id )->get();
         //dd($prod);
          Cart::destroy($prod[0]->id);
-         return redirect()->back();
+         return $prod;
     }
 }
 
