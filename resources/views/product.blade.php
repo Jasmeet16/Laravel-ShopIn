@@ -17,14 +17,15 @@
                             @if (!Auth::guest() && $cart->inCart($product->id))
                                 <button class='btn btn-dark w-100 py-3' type="submit" disabled>Product Already Present in
                                     Cart</button>
-                            @elseif ( !Auth::guest() && $product->qty <= 0)<button
-                                    class='btn btn-dark w-100 py-3' type="submit" disabled>Product
+                            @elseif ( !Auth::guest() && $product->qty <= 0)<button class='btn btn-dark w-100 py-3'
+                                    type="submit" disabled>Product
                                     Out of Stock
                                     </button>
                                 @else
 
-                                    <form action="cart/{{ $product->id }}" id="add-cart" method="POST">
+                                    <form class="add-cart" action="{{ url('products/cart') }}"  method="POST">
                                         {{ csrf_field() }}
+                                        <input type="hidden" class='prod_id' value="{{ $product->id }}">
                                         <button class='btn btn-dark w-100 py-3' type="submit">Add To Cart</button>
                                     </form>
                             @endif
@@ -54,16 +55,21 @@
             </div>
         </div>
     </div>
-    {{-- <script type="text/javascript">
-        $('#add-cart').on('submit', function(event) {
-            event.preventDefault();
+    <script type="text/javascript">
+        $('.add-cart').on('submit', function(e) {
+            e.preventDefault();
+
+            //console.log(e.target);
+            let prodId = e.target.childNodes[3].value;
+             console.log(prodId);
             $.ajax({
-                url: "cart/{{ $product->id }}",
+                url: "cart",
                 type: "POST",
                 data: {
-                    "_token": "{{ csrf_token() }}"
+                    "_token": "{{ csrf_token() }}",
+                    "id": prodId
                 }
-            });
-        });
-    </script> --}}
+            })
+        })
+    </script>
 @endsection

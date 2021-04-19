@@ -45,7 +45,7 @@ Route::get( '/cart' , 'CartController@index' );
 
 Route::delete( 'cart' , 'CartController@destroy' );
 
- Route::post( 'cart/{id}' ,'CartController@update' );
+ Route::post( 'cart' ,'CartController@update' );
 
  Route::get( 'cart/checkout/profile' ,'ProfileController@create' );
  Route::post( '/profile' ,'ProfileController@store' );

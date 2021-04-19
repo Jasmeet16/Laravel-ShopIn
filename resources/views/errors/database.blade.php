@@ -3,7 +3,8 @@
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
-            <h1> {{ $error }} </h1>
+            <div class="alert alert-danger"> <h1> {{ $error }} </h1> </div>
+            
         </div>
     </div>
 @endsection

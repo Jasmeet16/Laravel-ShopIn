@@ -27,13 +27,17 @@ class CartController extends Controller
         // userid -> cartitems
         // cartitems -> prodid
         // prodid -> prod
-
-        $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
-        // dd($items);
-        $products = [];
-        foreach( $items as $item ){
-            $products[] =  Product::where( 'id' , $item->product_id );
+        try {
+            $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
+            // dd($items);
+            $products = [];
+            foreach( $items as $item ){
+                $products[] =  Product::where( 'id' , $item->product_id );
+            }
+        } catch (\Exception $e) {
+            dd($e);
         }
+        
         // dd($items);  
         //dd($products);
         return view('user.cart' , compact('products'));
@@ -134,10 +138,10 @@ class CartController extends Controller
      * @param  \App\cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request)
     {
         // dd($request->qty);
-        Auth::user()->cart->where('product_id' , $id)->update(['qty' => $request->qty ]);
+        Auth::user()->cart->where('product_id' , $request->id)->update(['qty' => $request->qty ]);
         return redirect()->back();
     }
 
@@ -149,7 +153,7 @@ class CartController extends Controller
      */
     public function destroy(Request $request)
     {
-       /// dd( $request->id );
+         //dd( $request->id );
         $prod = Auth::user()->cart()->where( 'product_id' , $request->id )->get();
         // $items = Cart::where( 'user_id' ,Auth::user()->id )->get();
         //dd($prod);

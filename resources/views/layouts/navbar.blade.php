@@ -66,7 +66,7 @@
             @else
                 <ul class="buttons">
                     <li>
-                        @if (Auth::user()->admin)
+                        @if (  Auth::user()->admin)
                             <a href="{{ url('/admin') }}" role="button" aria-expanded="false">
                                 Dashboard
                             </a>

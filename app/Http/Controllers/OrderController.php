@@ -39,6 +39,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //dd( Auth::user()->cart()->get() );
+        
         foreach( Auth::user()->cart()->get() as $item ){
             Order::create([
                 'user_id' =>  Auth::user()->id,

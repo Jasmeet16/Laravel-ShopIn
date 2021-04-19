@@ -4,9 +4,7 @@
 @section('content')
 
     <div class="album py-5 bg-light">
-
         <div class="container">
-
             <h3 class='mb-5'>Products Here</h3>
             @if (\Session::has('success'))
                 <div class="alert alert-info">{!! \Session::get('success') !!}</div>
@@ -35,7 +33,7 @@
                                             <form class='add-cart w-50' action="{{ url('products/cart') }}" method="POST">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" class='prod_id' value="{{ $product->id }}">
-                                                <button class='btn btn-outline-secondary w-100' type="submit">Add To
+                                                <button class='btn btn-outline-secondary w-100' id="{{ $product->id }}" type="submit">Add To
                                                     Cart</button>
                                             </form>
                                     @endif
@@ -60,7 +58,7 @@
             e.preventDefault();
 
             let prodId = e.target.childNodes[3].value;
-            //console.log(prodId);
+           // console.log(e.target.childNodes);
             $.ajax({
                 url: "products/cart",
                 type: "POST",
@@ -69,13 +67,11 @@
                     "id": prodId
                 },
                 success: function(data) {
-                   console.log($('.success-message'));
-                   $('.success-message').css("display" , "true");
+                   //console.log($('.success-message'));
+                  // $('.success-message').css("display" , "true");
+                  $(`#${prodId}`).text('Product Added');
                 }
-
             })
-
-
 
         })
 
