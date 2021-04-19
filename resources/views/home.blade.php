@@ -2,10 +2,8 @@
 
 @inject('cart', 'App\Http\Controllers\CartController')
 @section('content')
-
     <div class="album py-5 bg-light">
         <div class="container">
-            <h3 class='mb-5'>Products Here</h3>
             @if (\Session::has('success'))
                 <div class="alert alert-info">{!! \Session::get('success') !!}</div>
             @endif
@@ -22,11 +20,11 @@
 
                                 <div class="d-flex justify-content-between align-items-center buttons">
                                     @if (!Auth::guest() && $cart->inCart($product->id))
-                                        <button class='btn btn-outline-secondary w-100' type="submit" disabled>Product
+                                        <button class='btn btn-outline-secondary w-100' type="submit" disabled>
                                             Already
                                             Present in Cart</button>
                                     @elseif ( !Auth::guest() && $product->qty <= 0) <button
-                                            class='btn btn-outline-secondary w-100' type="submit" disabled>Product
+                                            class='btn btn-outline-secondary w-100' type="submit" disabled>
                                             Out of Stock
                                             </button>
                                         @else
@@ -52,13 +50,10 @@
         </div>
     </div>
     <script>
-        //  $('.container .buttons').each(function() {
-
+     
         $('.add-cart').on('submit', function(e) {
             e.preventDefault();
-
             let prodId = e.target.childNodes[3].value;
-           // console.log(e.target.childNodes);
             $.ajax({
                 url: "products/cart",
                 type: "POST",
@@ -67,18 +62,13 @@
                     "id": prodId
                 },
                 success: function(data) {
-                   //console.log($('.success-message'));
-                  // $('.success-message').css("display" , "true");
                   $(`#${prodId}`).text('Product Added');
                 }
             })
-
         })
-
     </script>
 
 @endsection
-
 @section('footer')
     {{ $products->links() }}
 @endsection

@@ -14,10 +14,18 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     public function index()
     {
-        $orders = Order::where(  'user_id' , Auth::user()->id )->get();
-        return view('user.orders' , compact('orders'));
+        try {
+            $orders = Order::where('user_id', Auth::user()->id)->get();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
+        return view('user.orders', compact('orders'));
     }
 
     /**
@@ -38,24 +46,28 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //dd( Auth::user()->cart()->get() );
-        
-        foreach( Auth::user()->cart()->get() as $item ){
-            Order::create([
-                'user_id' =>  Auth::user()->id,
-                'product_id' => $item->product_id,
-                'qty' => $item->qty
-            ]);
-        }
-        
-        foreach( Auth::user()->cart()->get() as $item ){
-            $product = Product::find($item->product_id);
-            $product->qty = $product->qty - $item->qty;
-            
-            $product->save();
+
+        try {
+            foreach (Auth::user()->cart()->get() as $item) {
+                Order::create([
+                    'user_id' =>  Auth::user()->id,
+                    'product_id' => $item->product_id,
+                    'qty' => $item->qty
+                ]);
+            }
+
+            foreach (Auth::user()->cart()->get() as $item) {
+                $product = Product::find($item->product_id);
+                $product->qty = $product->qty - $item->qty;
+
+                $product->save();
+            }
+
+            Auth::user()->cart()->delete();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
 
-        Auth::user()->cart()->delete();
         return view('user.congratulation');
     }
 

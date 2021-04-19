@@ -35,18 +35,18 @@
                 <div class="col-md-5">
                     <ul class="list-group py-3">
                         <li class="py-3 list-group-item">
-                            <h3> Total : ₹ {{ $cart->total() }}</h3>
+                            <h3> Amount : ₹ {{ $cart->total() + ( $cart->total() * 0.18 ) + 50 }}</h3>
 
                         </li>
                         <li class="py-3 list-group-item">
-                            <strong style="font-size: 1.5rem">Select Mode of Payment</strong>
+                            <strong class="py-3" style="font-size: 1.5rem">Select Mode of Payment</strong>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio1">Cash On Delivery</label>
+                                <label class="custom-control-label p-2" for="customRadio1">Cash On Delivery</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio2">Portal</label>
+                                <input type="radio" id="customRadio2 " name="customRadio" class="custom-control-input">
+                                <label class="custom-control-label p-2" for="customRadio2">Portal</label>
                             </div>
                         </li>
                         <li class="py-3 list-group-item">

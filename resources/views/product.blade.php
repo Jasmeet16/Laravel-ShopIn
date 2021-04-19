@@ -11,22 +11,39 @@
                     </div>
                     <div class="row my-3">
                         <div class="col-md-6">
-                            <button class='btn btn-dark w-100 py-3'> Buy Now </button>
+                            @if (!Auth::guest() && $cart->inCart($product->id))
+                                <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Go to
+                                    Cart</button>
+
+                            @elseif ( !Auth::guest() && $product->qty <= 0)<button class='btn btn-dark w-100 py-3'
+                                    id="cart-btn" type="submit" disabled>Product
+                                    Out of Stock
+                                    </button>
+                                @else
+                                    <form action="{{ url('products/cart') }}" method="POST">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" class='prod_id' name="id" value="{{ $product->id }}">
+                                        <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit">Buy Now</button>
+                                    </form>
+                            @endif
+
                         </div>
                         <div class="col-md-6">
                             @if (!Auth::guest() && $cart->inCart($product->id))
-                                <button class='btn btn-dark w-100 py-3' type="submit" disabled>Product Already Present in
+                                <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Product Already
+                                    Present in
                                     Cart</button>
                             @elseif ( !Auth::guest() && $product->qty <= 0)<button class='btn btn-dark w-100 py-3'
-                                    type="submit" disabled>Product
+                                    id="cart-btn" type="submit" disabled>Product
                                     Out of Stock
                                     </button>
                                 @else
 
-                                    <form class="add-cart" action="{{ url('products/cart') }}"  method="POST">
+                                    <form class="add-cart" action="{{ url('products/cart') }}" method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' value="{{ $product->id }}">
-                                        <button class='btn btn-dark w-100 py-3' type="submit">Add To Cart</button>
+                                        <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit">Add To
+                                            Cart</button>
                                     </form>
                             @endif
                         </div>
@@ -61,15 +78,22 @@
 
             //console.log(e.target);
             let prodId = e.target.childNodes[3].value;
-             console.log(prodId);
+            console.log(prodId);
             $.ajax({
                 url: "cart",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id": prodId
+                },
+                success: function() {
+                    $('#cart-btn').text('Product Added');
+                    $("#buy-now").prop({
+                        disabled: true
+                    });
                 }
             })
         })
+
     </script>
 @endsection

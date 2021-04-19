@@ -23,7 +23,6 @@ class ProfileController extends Controller
      */
     public function index()
     {
-      
     }
 
     /**
@@ -33,9 +32,10 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        if(  Auth::user()->profile()->get()->isNotEmpty() ){
+        
+        if (Auth::user()->profile()->get()->isNotEmpty()) {
             return view('user.checkout');
-        } 
+        }
         return view('user.profile');
     }
 
@@ -46,29 +46,32 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-     {
+    {
 
-     
-    if(  Auth::user()->profile()->get()->isNotEmpty() ){
-        return redirect('/checkout');
-    }
 
-        $this->validate($request, [
-            'name' => 'required',
-            'phone' => 'required|numeric',
-            'address' => 'required',
-            'state' => 'required',
-            'zip' => 'required',
-        ]);
-
-        $completeAddress = $request->address . $request->state .$request->zip;
-
-        Profile::create([
-            'user_id' => Auth::user()->id,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $completeAddress,
-        ]);
+        if (Auth::user()->profile()->get()->isNotEmpty()) {
+            return redirect('/checkout');
+        }
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'phone' => 'required|numeric',
+                'address' => 'required',
+                'state' => 'required',
+                'zip' => 'required',
+            ]);
+    
+            $completeAddress = $request->address . $request->state . $request->zip;
+    
+            Profile::create([
+                'user_id' => Auth::user()->id,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $completeAddress,
+            ]);
+        } catch (\Exception $e) {
+            dd($e);
+        }
         return redirect('/cart/checkout/profile');
     }
 

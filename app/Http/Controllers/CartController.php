@@ -28,53 +28,19 @@ class CartController extends Controller
         // cartitems -> prodid
         // prodid -> prod
         try {
-            $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
-            // dd($items);
+            $items = Cart::where('user_id', Auth::user()->id)->get();
             $products = [];
-            foreach( $items as $item ){
-                $products[] =  Product::where( 'id' , $item->product_id );
+            foreach ($items as $item) {
+                $products[] =  Product::where('id', $item->product_id);
             }
         } catch (\Exception $e) {
-            dd($e);
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
-        
-        // dd($items);  
-        //dd($products);
-        return view('user.cart' , compact('products'));
+
+        return view('user.cart', compact('products'));
     }
 
-    //custom functions
 
-    public function total(){
-        $total = 0;
-        $items = Cart::where( 'user_id' ,Auth::user()->id)->get();
-
-        foreach( $items as $item ){
-            $product =  Product::where( 'id' , $item->product_id )->get();
-            $total += $product[0]->price * $item->qty;
-        }
-        return $total;
-    }
-    public function selectedQty($id){
-       
-        $item = Cart::where( 'product_id' , $id)->get();
-    
-        return $item[0]->qty;
-    }
-
-    public function inCart($id){
-       
-        $item = Cart::where( [ 'product_id' => $id ,  'user_id' => Auth::user()->id ])->get();
-        //dd( $item->isEmpty());
-        if( $item->isEmpty()){
-            return false;
-        }
-        return true;
-    }
-    public function getProduct($id){
-        $item = Product::where('id' , $id )->get();
-        return $item;
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -91,9 +57,8 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store( Request $request )
+    public function store(Request $request)
     {
-        //dd($request->id);
         try {
             Cart::create([
                 'user_id' => Auth::user()->id,
@@ -101,12 +66,9 @@ class CartController extends Controller
                 'qty' => 1
             ]);
         } catch (\Exception $e) {
-            dd($e);
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
-        
-        
-
-        return with('success', 'Product Added To Cart');
+        return redirect('/cart');
     }
 
     /**
@@ -140,9 +102,12 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request->qty);
-        Auth::user()->cart->where('product_id' , $request->id)->update(['qty' => $request->qty ]);
-        return redirect()->back();
+        try {
+            Auth::user()->cart->where('product_id', $request->id)->update(['qty' => $request->qty]);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -153,13 +118,47 @@ class CartController extends Controller
      */
     public function destroy(Request $request)
     {
-         //dd( $request->id );
-        $prod = Auth::user()->cart()->where( 'product_id' , $request->id )->get();
-        // $items = Cart::where( 'user_id' ,Auth::user()->id )->get();
-        //dd($prod);
-         Cart::destroy($prod[0]->id);
-         return $prod;
+        try {
+            $prod = Auth::user()->cart()->where('product_id', $request->id)->get();
+            Cart::destroy($prod[0]->id);
+            return $prod;
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
+    }
+
+    //custom functions
+
+    public function total()
+    {
+        $total = 0;
+        $items = Cart::where('user_id', Auth::user()->id)->get();
+
+        foreach ($items as $item) {
+            $product =  Product::where('id', $item->product_id)->get();
+            $total += $product[0]->price * $item->qty;
+        }
+        return $total;
+    }
+
+    public function selectedQty($id)
+    {
+        $item = Cart::where('product_id', $id)->get();
+        return $item[0]->qty;
+    }
+
+    public function inCart($id)
+    {
+        $item = Cart::where(['product_id' => $id,  'user_id' => Auth::user()->id])->get();
+        if ($item->isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getProduct($id)
+    {
+        $item = Product::where('id', $id)->get();
+        return $item;
     }
 }
-
-

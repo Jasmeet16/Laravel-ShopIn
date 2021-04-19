@@ -50,8 +50,12 @@ footer p {
   height: 40vh;
   object-fit: cover;
   } */
+  .card{
+    border-radius: 5%;
+  }
 .card image {
   padding: 40px;
+  border-radius: 5%;
   display: inline-block;
 }
 

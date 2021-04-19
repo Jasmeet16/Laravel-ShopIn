@@ -74,18 +74,6 @@ class ProductController extends Controller
             'qty' => $request->quantity,
             'image' => $path
         ]);
-
-        // $product = new \App\Product;
-
-        // $product->name =  $request->name;
-        // $product->description =  $request->description;
-
-        // $product->price =  $request->price;
-        // $product->qty =  $request->quantity;
-        // $product->image =  $path;
-
-        // $product->save();
-
         $request->session('message', "product added successfully");
 
         return redirect('/admin');
@@ -102,7 +90,6 @@ class ProductController extends Controller
         try {
             $products = Product::paginate(6);
         } catch (QueryException $e) {
-            // return view('errors.database' , [ 'error' => $e->getMessage() ] );   
             return view('errors.database', ['error' => "Error connecting to database"]);
         }
         return view('home', compact('products'));
@@ -114,14 +101,11 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
         } catch (QueryException $e) {
-            // return view('errors.database' , [ 'error' => $e->getMessage() ] );   
             return view('errors.database', ['error' => "Error connecting to database"]);
         } catch (ModelNotFoundException $e) {
-            //dd($e->getMessage());
             return view('errors.database', ['error' => $e->getMessage()]);
         }
 
-        // dd($product->name);
         return view('product', compact('product'));
     }
 
