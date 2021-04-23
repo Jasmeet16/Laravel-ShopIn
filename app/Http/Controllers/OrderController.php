@@ -20,12 +20,8 @@ class OrderController extends Controller
     }
     public function index()
     {
-        try {
-            $orders = Order::where('user_id', Auth::user()->id)->get();
-        } catch (\Exception $e) {
-            return view('errors.database', ['error' => $e->getMessage()]);
-        }
-        return view('user.orders', compact('orders'));
+        $orders = Order::all();
+        return view('admin.orders' , compact('orders'));
     }
 
     /**
@@ -59,15 +55,13 @@ class OrderController extends Controller
             foreach (Auth::user()->cart()->get() as $item) {
                 $product = Product::find($item->product_id);
                 $product->qty = $product->qty - $item->qty;
-
                 $product->save();
             }
-
             Auth::user()->cart()->delete();
+
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-
         return view('user.congratulation');
     }
 
@@ -79,7 +73,12 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        try {
+            $orders = Order::where('user_id', Auth::user()->id)->get();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
+        return view('user.orders', compact('orders'));
     }
 
     /**

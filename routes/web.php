@@ -26,7 +26,9 @@ Route::get('/products/{id}', 'ProductController@showsingle');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
+        
         Route::get('/', 'AdminController@dashboard');
+
         Route::get('/products', 'AdminController@show');
 
         Route::get('/products/create', 'ProductController@create');
@@ -35,23 +37,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         Route::delete('/products/{id}', 'ProductController@destroy');
 
-
         Route::get('/products', 'ProductController@index');
+
+        Route::get('/users' , 'UserController@index');
+
+        Route::get('/users/{id}' , 'UserController@show');
+
+        Route::get('/orders' , 'OrderController@index');
+
+        Route::get('/orders/status' , 'OrderController@status');
+
+
     });
 });
 
-
-
 Route::post( '/products/cart' , 'CartController@store' );
+
 Route::get( '/cart' , 'CartController@index' );
+
 Route::get( '/carttotal' , 'CartController@total' );
 
 Route::delete( 'cart' , 'CartController@destroy' );
 
- Route::post( 'cart' ,'CartController@update' );
+Route::post( 'cart' ,'CartController@update' );
 
  Route::get( 'cart/checkout/profile' ,'ProfileController@create' );
+ 
  Route::post( '/profile' ,'ProfileController@store' );
 
  Route::post('/orders', 'OrderController@store' );
- Route::get('/orders', 'OrderController@index' );
+ 
+ Route::get('/orders', 'OrderController@show' );

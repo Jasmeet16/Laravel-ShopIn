@@ -22,6 +22,17 @@
                                 Show Products
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/admin/users') }}">
+                                
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/admin/orders') }}">
+                               Orders
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>

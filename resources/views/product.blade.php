@@ -23,7 +23,7 @@
                                     <form action="{{ url('products/cart') }}" method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' name="id" value="{{ $product->id }}">
-                                        <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit">Buy Now</button>
+                                        <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit"> <i class="fas fa-bolt mr-5"></i> Buy Now </button>
                                     </form>
                             @endif
 
@@ -42,7 +42,7 @@
                                     <form class="add-cart" action="{{ url('products/cart') }}" method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' value="{{ $product->id }}">
-                                        <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit">Add To
+                                        <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit"><i class="fas fa-shopping-cart mr-5"></i>Add To
                                             Cart</button>
                                     </form>
                             @endif
@@ -91,6 +91,10 @@
                     $("#buy-now").prop({
                         disabled: true
                     });
+                    document.getElementById(`cart-btn`).disabled = true;
+                },
+                error : function(){
+                    alert('You must be logged in');
                 }
             })
         })

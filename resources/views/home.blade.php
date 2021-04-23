@@ -20,24 +20,22 @@
 
                                 <div class="d-flex justify-content-between align-items-center buttons">
                                     @if (!Auth::guest() && $cart->inCart($product->id))
-                                        <button class='btn btn-outline-secondary w-100' type="submit" disabled>
-                                            Already
-                                            Present in Cart</button>
-                                    @elseif ( !Auth::guest() && $product->qty <= 0) <button
-                                            class='btn btn-outline-secondary w-100' type="submit" disabled>
+                                        <button class='btn btn-outline-secondary w-75' type="submit" disabled>
+                                            In Cart</button>
+                                    @elseif (  $product->qty <= 0) <button
+                                            class='btn btn-outline-secondary w-75' type="submit" disabled>
                                             Out of Stock
                                             </button>
                                         @else
                                             <form class='add-cart w-50' action="{{ url('products/cart') }}" method="POST">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" class='prod_id' value="{{ $product->id }}">
-                                                <button class='btn btn-outline-secondary w-100' id="{{ $product->id }}" type="submit">Add To
-                                                    Cart</button>
+                                                <button class='btn btn-outline-secondary w-100' id="{{ $product->id }}" type="submit"> 
+                                                    <i class="fas fa-shopping-cart"></i> Add To Cart</button>
                                             </form>
                                     @endif
-
                                     <a href="{{ url('products/' . $product->id) }}" type="button"
-                                        class="btn btn-outline-secondary w-50">View Product</a>
+                                        class="btn btn-outline-secondary w-50"><i class="far fa-eye"></i>View Product</a>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +60,12 @@
                     "id": prodId
                 },
                 success: function(data) {
+                document.getElementById(`${prodId}`).disabled = true;
                   $(`#${prodId}`).text('Product Added');
+                  
+                },
+                error : function(){
+                    alert('You must be logged in');
                 }
             })
         })

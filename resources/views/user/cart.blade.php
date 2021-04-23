@@ -37,7 +37,7 @@
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" class='prod_id' value="{{ $product->get()[0]->id }}">
-                                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    <button class="btn btn-danger btn-sm" type="submit"><i class="far fa-trash-alt"></i></button>
                                 </form>
                             </li>
                         @endforeach
@@ -65,7 +65,7 @@
                             </ul>
                         </li>
                         <li class="py-3 list-group-item">
-                            <a type="button" class="btn btn-dark w-100 py-3 <?php if ($cart->total() == 0) {
+                            <a type="button"  class="btn btn-dark w-100 py-3 <?php if ($cart->total() == 0) {
                                     echo 'disabled';
                                 } ?>" href="{{ url('/cart/checkout/profile') }}">Proceed</a>
                         </li>
@@ -137,8 +137,6 @@
                             data: {},
                             success: function(data) {
                                 $(`#total`).text("Total : " + data);
-
-
                                 let extraCharge = ((parseInt(data) * 18) / 100)
                                     .toFixed(2);
                                 //console.log( parseInt(data) + parseInt(extraCharge) + 50);

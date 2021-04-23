@@ -39,7 +39,7 @@
 
                         </li>
                         <li class="py-3 list-group-item">
-                            <strong class="py-3" style="font-size: 1.5rem">Select Mode of Payment</strong>
+                            <h3><strong class="py-3" style="font-size: 1.5rem">Select Mode of Payment</strong></h3>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
                                 <label class="custom-control-label p-2" for="customRadio1">Cash On Delivery</label>

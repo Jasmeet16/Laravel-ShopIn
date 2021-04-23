@@ -7,13 +7,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script> --}}
-
-
-
-    <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
    
-    <!-- Custom styles for this template -->
     <link href="/css/album.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
 
@@ -24,26 +19,19 @@
             justify-content: space-around;
             background: transparent;
         }
-
         .navbar-dark .navbar-brand {
             background: transparent;
         }
-
         .navbar a {
             color: whitesmoke;
             margin-left: 10px;
         }
-
         .navbar a:hover {
             color: whitesmoke;
         }
-
-
         main {
             min-height: 75vh;
         }
-        
-
     </style>
 </head>
 <header>
@@ -64,7 +52,7 @@
                     </a>
                 </div>
             @else
-                <ul class="buttons">
+                <ul class="buttons" style="list-style-type:none;">
                     <li>
                         @if (  Auth::user()->admin)
                             <a href="{{ url('/admin') }}" role="button" aria-expanded="false">
@@ -79,9 +67,7 @@
                                     Cart
                                 </a>
                             </strong>
-
                         @endif
-
                     </li>
                     <li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -90,11 +76,7 @@
                         <strong>
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-
                         </strong>
-
-
-
                     </li>
                 </ul>
             @endif
