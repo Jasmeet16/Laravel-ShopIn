@@ -158,7 +158,11 @@ class CartController extends Controller
 
     public function getProduct($id)
     {
-        $item = Product::where('id', $id)->get();
+        try {
+            $item = Product::where('id', $id)->get();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
         return $item;
     }
 }

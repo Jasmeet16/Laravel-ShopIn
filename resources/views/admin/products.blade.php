@@ -29,6 +29,7 @@
                       <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                     </form>
                     </td>
+                    <td> <a href="{{'products'}}/{{$product->id}}" class="btn btn-info btn-sm" type="button"> Update </a> </td>
                   </tr>
                   @endforeach()
                 

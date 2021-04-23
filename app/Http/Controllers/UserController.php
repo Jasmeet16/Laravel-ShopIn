@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\Order;
+use App\Product;
+use App\Profile;
+
 class UserController extends Controller
 {
     /**
@@ -51,8 +54,8 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $orders = Order::where('user_id' , $user->id)->get();
-       
-        return view( 'admin.user' , [ 'user'=> $user , 'orders' => $orders ] );
+       $profile = Profile::where( 'user_id' , $user->id )->get();
+        return view( 'admin.user' , [ 'user'=> $user , 'orders' => $orders  , 'profile' => $profile] );
     }
 
     /**

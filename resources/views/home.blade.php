@@ -4,6 +4,7 @@
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
+            
             @if (\Session::has('success'))
                 <div class="alert alert-info">{!! \Session::get('success') !!}</div>
             @endif

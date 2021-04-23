@@ -129,9 +129,31 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+
+    public function updateShowForm($id)
     {
-        //
+        $product = Product::find($id);
+        return view('admin.updateProduct', compact('product'));
+    }
+
+    public function update(Request $request)
+    {
+        $product = Product::where('id', $request->id);
+       
+        
+
+        $path = $product->get()[0]->image;
+        if ($request->image) {
+            $extension = "." . $request->image->getClientOriginalExtension();
+            $name = basename($request->image->getClientOriginalName(), $extension) . time();
+            $name = $name . $extension;
+            Storage::disk('public')->putFileAs('uploads', $request->image, $name);
+            $path = '/uploads/' . $name;
+        }
+
+        
+        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'image' => $path]);
+        return redirect()->back();
     }
 
     /**

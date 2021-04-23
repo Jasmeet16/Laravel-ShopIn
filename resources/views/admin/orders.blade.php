@@ -18,28 +18,67 @@
                 @foreach ($orders as $order)
                     {{-- {{ $order }} --}}
                     <li class="list-group-item">
-                        <p class="d-flex justify-content-between">
-                            <span>{{ $order->id }}</span>
-                            <span>{{ $order->product_id }}</span>
-                            <span>{{ $order->qty }}</span>
-                            <span>{{ $order->status }}</span>
-
-                            <span>
-                                <select name="status" id="status">
+                        <div class="d-flex justify-content-between">
+                            <div>{{ $order->id }}</div>
+                            <div>{{ $order->product_id }}</div>
+                            <div>{{ $order->qty }}</div>
+                           
+                                <select name="status" class="status" id="{{ $order->id }}">
+                                    <option value="0" hidden> Change Status </option>
                                     <option value="1"> Pending </option>
                                     <option value="2"> Confirmed </option>
                                     <option value="3"> Dispatched </option>
                                     <option value="4"> Delivered </option>
                                 </select>
-                            </span>
-                            <span>{{ $order->created_at }}</span>
-                        </p>
+                            
+                            @if ($order->status == 'Confirmed')
+                                <div class="alert alert-success" id="status{{ $order->id }}">
+                                    {{ $order->status }}
+                                </div>
+                            @elseif( $order->status =='Dispatched' )
+                                <div class="alert alert-warning" id="status{{ $order->id }}">
+                                    {{ $order->status }}
+                                </div>
+                            @elseif ($order->status = 'Delivered')
+                                <div class="alert alert-info" id="status{{ $order->id }}">
+                                    {{ $order->status }}
+                                </div>
+                                @elseif ($order->status = 'Pending')
+                                <div class="alert alert-danger" id="status{{ $order->id }}">
+                                    {{ $order->status }}
+                                </div>
+                            @endif
+
+
+                            <div>{{ $order->created_at }}</div>
+                        </div>
                     </li>
                 @endforeach()
             </ul>
         </div>
     </main>
     <script>
-        
+        $('.status').on('change', function(e) {
+
+            let status = e.target.value;
+            let orderId = e.target.id;
+            $.ajax({
+                url: `orders/status/${orderId}/${status}`,
+                type: "GET",
+                success: function(response) {
+                    $(`#status${orderId}`).text(response);
+                    if (response === 'Confirmed') {
+                        document.getElementById(`status${orderId}`).className = "alert alert-success";
+                    } else if (response === 'Dispatched') {
+                        document.getElementById(`status${orderId}`).className = "alert alert-warning";
+                    } else if (response === 'Delivered') {
+                        document.getElementById(`status${orderId}`).className = "alert alert-info";
+                    }else{
+                        document.getElementById(`status${orderId}`).className = "alert alert-danger";
+                    }
+                }
+            });
+        });
+
     </script>
 @endsection

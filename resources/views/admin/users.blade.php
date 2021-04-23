@@ -3,15 +3,36 @@
 @section('content')
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
         <div class="container">
-            <ul class="list-group flush">
+            <h3>List of Users</h3>
+            <ul class="list-group">
+                <li class="list-group-item align-items-center">
+
+                    <p class="d-flex justify-content-between">
+                        <span>User's Id</span>
+                        <span> Email </span>
+                        <span>
+                            Actions
+                        </span>
+                    </p>
+
+                </li>
                 @foreach ($users as $user)
-                    <li class="list-group-item">
-                        <a href="users/{{ $user->id }}">
-                            <p>
-                                <span>{{ $user->id }}</span>
-                                <span>{{ $user->email }}</span>
-                            </p>
-                        </a>
+                    <li class="list-group-item r">
+
+                        <div class="d-flex justify-content-between">
+                            <div class="text-center"> <span  >{{ $user->id }}</span></div>
+
+                            <div class="text-center"> <span>{{ $user->email }}</span></div>
+
+                            <div class="text-center"> <a type="button" class="btn btn-info" href="users/{{ $user->id }}">
+                                Details
+                            </a></div>
+
+                           
+                            
+                           
+                        </div>
+
                     </li>
                 @endforeach
             </ul>

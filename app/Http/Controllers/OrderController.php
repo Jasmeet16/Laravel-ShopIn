@@ -6,6 +6,7 @@ use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class OrderController extends Controller
 {
@@ -113,5 +114,24 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+    }
+
+    public function status( $order_id , $status ){
+       
+        $order = Order::find($order_id);
+       
+        if($status == 1){
+            $newStatus = "Pending";
+        }
+        else if( $status == 2 ){
+            $newStatus = "Confirmed";
+        }else if( $status == 3 ){
+            $newStatus = "Dispatched";
+        }else if( $status == 4 ){
+            $newStatus = "Delivered";
+        }
+        $order->update(['status' => $newStatus]);
+        return $newStatus;
+       
     }
 }
