@@ -10,26 +10,27 @@
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
+                       
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/products/create">
-                                <span data-feather="shopping-cart"></span>
+                            <a class="nav-link {{ Request::path() == 'admin/products/create' ? 'active' : '' }}"  href="/admin/products/create">
+                                
                                 Add Product
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/admin/products') }}">
-                                <span data-feather="shopping-cart"></span>
+                            <a class="nav-link {{ Request::path() == 'admin/products' ? 'active' : '' }}" href="{{ url('/admin/products') }}">
+                                
                                 Show Products
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/admin/users') }}">
+                            <a class="nav-link {{ Request::path() == 'admin/users' ? 'active' : '' }}" href="{{ url('/admin/users') }}">
                                 
                                 Users
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/admin/orders') }}">
+                            <a class="nav-link {{ Request::path() == 'admin/orders' ? 'active' : '' }}" href="{{ url('/admin/orders') }}">
                                Orders
                             </a>
                         </li>
@@ -39,10 +40,7 @@
             @yield('content')
         </div>
     </div>
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-    <script>
-        feather.replace()
-    </script>
+   
     @include('layouts.footer')
 
 

@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->integer('user_id');
             $table->integer('product_id');
             $table->integer('qty');
-            $table->string('status')->default('pending');
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }

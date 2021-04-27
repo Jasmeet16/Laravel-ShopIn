@@ -21,7 +21,7 @@ class OrderController extends Controller
     }
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::paginate(10);
         return view('admin.orders' , compact('orders'));
     }
 
@@ -121,9 +121,8 @@ class OrderController extends Controller
         $order = Order::find($order_id);
        
         if($status == 1){
-            $newStatus = "Pending";
-        }
-        else if( $status == 2 ){
+            $newStatus = "pending";
+        }else if( $status == 2 ){
             $newStatus = "Confirmed";
         }else if( $status == 3 ){
             $newStatus = "Dispatched";

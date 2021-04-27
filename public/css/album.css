@@ -55,9 +55,11 @@ footer p {
   object-fit: cover;
   } */
 .card {
+  
   border-radius: 5%;
 }
-.card image {
+.card-img-top {
+  height:300px !important;
   padding: 40px;
   border-radius: 5%;
   display: inline-block;

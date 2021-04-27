@@ -10,8 +10,10 @@
             @endif
             <div class="alert alert-info success-message" style="display: none">Product added to Cart</div>
             <div class="row">
+                <div class="card-group">
                 @foreach ($products->all() as $product)
                     <div class="col-md-4">
+                        
                         <div class="card mb-4 box-shadow">
                             <a href=" products/{{ $product->id }}">
                                 <img class="card-img-top" src="{{ url($product->image) }}" alt="product-image">
@@ -43,7 +45,7 @@
                     </div>
 
                 @endforeach
-
+            </div>
             </div>
 
         </div>
