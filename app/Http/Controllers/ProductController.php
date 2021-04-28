@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductForm;
 use App\Product;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $products = Product::latest()->get();
+            $products = Product::paginate(10);
         } catch (Exception $e) {
             dd($e);
         }
@@ -43,40 +44,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductForm $form)
     {
 
-
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'quantity' => 'required|numeric',
-            'image' => 'required'
-        ]);
-
-        // dd($request->all());
-        //
-        $extension = "." . $request->image->getClientOriginalExtension();
-        $name = basename($request->image->getClientOriginalName(), $extension) . time();
-        $name = $name . $extension;
-        echo ($name);
-
-        // $path = $request->image->storeAs('uploads',$name);
-        Storage::disk('public')->putFileAs('uploads', $request->image, $name);
-
-        $path = '/uploads/' . $name;
-
-        Product::create([
-            'name' =>  $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'qty' => $request->quantity,
-            'image' => $path
-        ]);
-        $request->session('message', "product added successfully");
-
-        return redirect('/admin');
+        try {
+            $form->persist();
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        }
+        return redirect()->back();
     }
 
     /**
@@ -152,7 +128,8 @@ class ProductController extends Controller
         }
 
         
-        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'image' => $path]);
+        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
+        \Session::flash('message' , "Updated Successfully");
         return redirect()->back();
     }
 

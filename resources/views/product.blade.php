@@ -1,13 +1,13 @@
 @extends('layouts.layout')
 @inject('cart', 'App\Http\Controllers\CartController')
 @section('content')
-
+    
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="row py-3 prod-img">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}" style='height: 100%; width: 100%;'>
+                    <div class="row py-3 prod-img" style="margin: auto">
+                        <img src="{{ $product->image }}" alt="{{ $product->name }}">
                     </div>
                     <div class="row my-3">
                         <div class="col-md-6">
@@ -23,7 +23,8 @@
                                     <form action="{{ url('products/cart') }}" method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' name="id" value="{{ $product->id }}">
-                                        <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit"> <i class="fas fa-bolt mr-5"></i> Buy Now </button>
+                                        <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit"> <i
+                                                class="fas fa-bolt mr-5"></i> Buy Now </button>
                                     </form>
                             @endif
 
@@ -42,7 +43,8 @@
                                     <form class="add-cart" action="{{ url('products/cart') }}" method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' value="{{ $product->id }}">
-                                        <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit"><i class="fas fa-shopping-cart mr-5"></i>Add To
+                                        <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit"><i
+                                                class="fas fa-shopping-cart mr-5"></i>Add To
                                             Cart</button>
                                     </form>
                             @endif
@@ -93,7 +95,7 @@
                     });
                     document.getElementById(`cart-btn`).disabled = true;
                 },
-                error : function(){
+                error: function() {
                     alert('You must be logged in');
                 }
             })

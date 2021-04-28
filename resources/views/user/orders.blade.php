@@ -19,10 +19,10 @@
                     <tbody>
                         @foreach ($orders as $order)
                             <tr class="align-self-center">
-                                <td> <img src="{{ $cart->getProduct($order->product_id)[0]->image }}" alt="thumbnail"
+                                <td> <img src="{{ $cart->getProduct($order->product_id)->image }}" alt="thumbnail"
                                         height="150px" width="150px"> </td>
-                                <td>{{ $cart->getProduct($order->product_id)[0]->name }}</td>
-                                <td>{{ $cart->getProduct($order->product_id)[0]->price }}</td>
+                                <td>{{ $cart->getProduct($order->product_id)->name }}</td>
+                                <td>{{ $cart->getProduct($order->product_id)->price }}</td>
                                 <td>{{ $order->qty }}</td>
                                 <td>
                                     @if ($order->status == 'Confirmed')

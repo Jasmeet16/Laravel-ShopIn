@@ -1,13 +1,8 @@
 @extends('admin.layout')
-
+@inject('cart', 'App\Http\Controllers\CartController')
 @section('content')
     <main role="main" class="col-md-9">
         <div class="container">
-
-
-
-
-
             <div class="row">
                 <div class="col-md-8">
 
@@ -21,12 +16,12 @@
                             </div>
                         @else
                             @foreach ($orders as $order)
-                                <li class="py-3 list-group-item">
+                                <li class="py-3 list-group-item  d-flex justify-content-between">
 
-                                    <p><strong> Id : </strong> {{ $order->id }} </p>
-                                    <p><strong>Product No. : </strong> {{ $order->product_id }} </p>
+                                    <p><strong> Order Id : </strong> {{ $order->id }} </p>
+                                    <p><strong>Product Id. : </strong> {{ $order->product_id }} </p>
+                                    <p><strong>Name : </strong> {{ $cart->getProduct($order->product_id )->name }} </p>
                                     <p><strong>Qty : </strong> {{ $order->qty }} </p>
-                                    <p><strong>Status : </strong> {{ $order->status }} </p>
                                 </li>
                             @endforeach
                         @endif

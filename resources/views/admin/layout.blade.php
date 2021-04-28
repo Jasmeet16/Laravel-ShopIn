@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
-
-
+    
 <body>
     @include('layouts.navbar')
 

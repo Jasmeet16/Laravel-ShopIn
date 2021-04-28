@@ -21,9 +21,9 @@
                         </li>
                         @foreach (Auth::user()->cart()->get() as $item)
                         <li class="py-3 list-group-item d-flex justify-content-between align-items-center">
-                            <img src="{{$cart->getProduct($item->product_id)[0]->image}}" alt="prd-img" height="100" width="100">
-                                <span>{{ $cart->getProduct($item->product_id)[0]->name }}</span>
-                                <span> ₹ {{ $cart->getProduct($item->product_id)[0]->price }}</span>
+                            <img src="{{$cart->getProduct($item->product_id)->image}}" alt="prd-img" height="100" width="100">
+                                <span>{{ $cart->getProduct($item->product_id)->name }}</span>
+                                <span> ₹ {{ $cart->getProduct($item->product_id)->price }}</span>
                                 <span> Qty : {{ $item->qty  }}</span>
                             </li>
                         @endforeach

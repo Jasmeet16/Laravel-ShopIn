@@ -4,6 +4,12 @@
     <main role="main" class="col-md-9">
         @include('error')
         <div class="container">
+
+            
+
+            @if (\Session::has('message'))
+                <div class="alert alert-success">{!! \Session::get('message') !!}</div>
+            @endif
             <h4 class='m-4 text-center'> Update Product</h4>
             <form method="POST" action='/admin/products' enctype='multipart/form-data'>
                 {{ csrf_field() }}

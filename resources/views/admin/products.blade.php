@@ -6,7 +6,7 @@
           <table class="table table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
-                  <th class='text-center'>  <h6> Poduct Id </h6></th>
+                  <th class='text-center'>  <h6> Product Id </h6></th>
                   <th class='text-center'>  <h6> Thumbnail </h6></th>
                   <th class='text-center'> <h6> Product Name </h6></th>
                   <th class='text-center'> <h6> Price </h6></th>
@@ -42,6 +42,6 @@
     </main>
 @endsection
 
-{{-- @section('footer')
+@section('footer')
  {{ $products->links() }}
-@endsection --}}
+@endsection

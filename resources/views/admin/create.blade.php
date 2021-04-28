@@ -4,7 +4,10 @@
     <main role="main" class="col-md-9">
         @include('error')
         <div class="container">
-          <h4 class='m-4 text-center'> Add a new Product</h4>
+            @if (\Session::has('message'))
+                <div class="alert alert-success mt-5">{!! \Session::get('message') !!}</div>
+            @endif
+            <h4 class='m-4 text-center'> Add a new Product</h4>
             <form class="mt-3" method="POST" action='/admin/products' enctype='multipart/form-data'>
                 {{ csrf_field() }}
                 <div class="form-group">

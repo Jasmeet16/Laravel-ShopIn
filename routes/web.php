@@ -29,7 +29,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         Route::get('/', 'AdminController@dashboard');
 
-        Route::get('/products', 'AdminController@show');
+      
 
         Route::get('/products/create', 'ProductController@create');
 

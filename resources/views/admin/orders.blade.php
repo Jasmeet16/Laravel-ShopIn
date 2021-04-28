@@ -17,10 +17,10 @@
                                 <h6> Quantity </h6>
                             </th>
                             <th class='text-center'>
-                                <h6> Status </h6>
+                                <h6> Options </h6>
                             </th>
                             <th class='text-center'>
-                                <h6> Options </h6>
+                                <h6>  Status</h6>
                             </th>
                             <th class='text-center'>
                                 <h6> Created_at </h6>
