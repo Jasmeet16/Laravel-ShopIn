@@ -11,25 +11,19 @@
 |
 */
 
-
-
-
-use App\Http\Controllers\OrderController;
-
-
 Route::get('/', 'ProductController@show');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/products/{id}', 'ProductController@showsingle');
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    
     Route::prefix('admin')->group(function () {
 
         Route::get('/', 'AdminController@dashboard');
-
-      
 
         Route::get('/products/create', 'ProductController@create');
 
@@ -70,3 +64,16 @@ Route::post('/profile', 'ProfileController@store');
 Route::post('/orders', 'OrderController@store');
 
 Route::get('/orders', 'OrderController@show');
+
+
+// database 
+
+// validations on qty
+
+// auth
+
+// route
+
+// mvc
+
+// blade inject bad

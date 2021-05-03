@@ -28,8 +28,8 @@ class ProductForm extends FormRequest
         return [
             'name' => 'required',
             'description' => 'required',
-            'price' => 'required|numeric',
-            'quantity' => 'required|numeric',
+            'price' => 'required|numeric|min:1',
+            'quantity' => 'required|numeric|min:1',
             'image' => 'required'
         ];
     }

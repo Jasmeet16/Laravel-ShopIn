@@ -54,7 +54,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $orders = Order::where('user_id' , $user->id)->get();
-       $profile = Profile::where( 'user_id' , $user->id )->get();
+        foreach( $orders as $order ){
+            $order->product = Product::find($order->product_id);
+        }
+        $profile = Profile::where( 'user_id' , $user->id )->get();
         return view( 'admin.user' , [ 'user'=> $user , 'orders' => $orders  , 'profile' => $profile] );
     }
 

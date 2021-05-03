@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileForm;
+use App\Cart;
 use App\Order;
+use App\Product;
 use App\Profile;
-use Faker\Provider\bg_BG\PhoneNumber;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProfileForm;
 use Illuminate\Support\Facades\Auth;
+use Faker\Provider\bg_BG\PhoneNumber;
 
 class ProfileController extends Controller
 {
@@ -31,11 +33,41 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     ////
+
+     public function getProduct($id)
+     {
+         try {
+             $item = Product::find($id);
+         } catch (\Exception $e) {
+             return view('errors.database', ['error' => $e->getMessage()]);
+         }
+         return $item;
+     }
+
+     public function total()
+     {
+         $total = 0;
+         $items = Cart::where('user_id', Auth::user()->id)->get();
+ 
+         foreach ($items as $item) {
+             $product =  Product::where('id', $item->product_id)->get();
+             $total += $product[0]->price * $item->qty;
+         }
+         return $total;
+     }
+ 
+     //
     public function create()
     {
 
         if (Auth::user()->profile()->get()->isNotEmpty()) {
-            return view('user.checkout');
+            $cart = Auth::user()->cart()->get();
+            foreach( $cart as $item ){
+                $item->product = $this->getProduct( $item->product_id );
+            }
+            return view('user.checkout' , ['cart' => $cart , 'total' => $this->total()]);
         }
         return view('user.profile');
     }

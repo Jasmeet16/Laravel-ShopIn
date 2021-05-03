@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@inject('cart', 'App\Http\Controllers\CartController')
+
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
@@ -9,25 +9,25 @@
                         <li class="py-3 list-group-item">
                             <h2> Shopping Cart </h2>
                         </li>
-                        @if (count($products) == 0)
+                        @if (count($items) == 0)
                             <div class="alert alert-danger"> Cart is empty</div>
                         @endif
-                        @foreach ($products as $product)
-                            {{-- {{ dd($product) }} --}}
+                        @foreach ($items as $item)
+                            
                             <li class="py-3 list-group-item d-flex justify-content-between align-items-center cart"
-                                id="{{ $product->get()[0]->id }}">
+                                id="{{ $item->product->id }}">
 
-                                <img src="{{ $product->get()[0]->image }}" alt="prd-img" height="100" width="100">
-                                <span>{{ $product->get()[0]->name }}</span>
-                                <span> ₹ {{ $product->get()[0]->price }}</span>
-                                <span id='qty-{{ $product->get()[0]->id }}'> Qty :
-                                    {{ $cart->selectedQty($product->get()[0]->id) }}</span>
-                                <form action="{{ url('cart/' . $product->get()[0]->id) }}" method="POST">
+                                <img src="{{ $item->product->image }}" alt="prd-img" height="100" width="100">
+                                <span>{{ $item->product->name }}</span>
+                                <span> ₹ {{ $item->product->price }}</span>
+                                <span id='qty-{{ $item->product->id }}'> Qty :
+                                    {{ $item->qty }}</span>
+                                <form action="{{ url('cart/' . $item->product->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     <select class="form-control select-qty" name="qty">
                                         <option value="" selected disabled hidden>Change Qty</option>
-                                        @for ($i = 1; $i <= $product->get()[0]->qty; $i++)
-                                            <option value="{{ $i }}" id="{{ $product->get()[0]->id }}">
+                                        @for ($i = 1; $i <= $item->product->qty; $i++)
+                                            <option value="{{ $i }}" id="{{ $item->product->id }}">
                                                 {{ $i }}</option>
                                         @endfor
 
@@ -36,7 +36,7 @@
                                 <form class="delete-prod" action="{{ url('cart') }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <input type="hidden" class='prod_id' value="{{ $product->get()[0]->id }}">
+                                    <input type="hidden" class='prod_id' value="{{ $item->product->id }}">
                                     <button class="btn btn-danger btn-sm" type="submit"><i class="far fa-trash-alt"></i></button>
                                 </form>
                             </li>
@@ -50,7 +50,7 @@
                         <li class="list-group-item text-center">
                             <ul class="list-group-flush p-2">
                                 <li class="py-2 list-group-item">
-                                    <span style="font-size:1rem"><strong id="total"> Cart Total : ₹ {{ $cart->total() }} </strong></span>
+                                    <span style="font-size:1rem"><strong id="total"> Cart Total : ₹ {{ $total }} </strong></span>
                                 </li>
                                 <li class="py-2 list-group-item">
                                     <span>GST : 18 % </span>
@@ -60,12 +60,12 @@
                                 </li>
                                 <li class="py-2 list-group-item">
                                     <h3 id="gross-total" style="font-size:1.5rem"> Gross Total : ₹
-                                        {{ $cart->total() + $cart->total() * 0.18 + 50 }} </h3>
+                                        {{ $total + $total * 0.18 + 50 }} </h3>
                                 </li>
                             </ul>
                         </li>
                         <li class="py-3 list-group-item">
-                            <a type="button"  class="btn btn-dark w-100 py-3 <?php if ($cart->total() == 0) {
+                            <a type="button"  class="btn btn-dark w-100 py-3 <?php if ($total == 0) {
                                     echo 'disabled';
                                 } ?>" href="{{ url('/cart/checkout/profile') }}">Proceed</a>
                         </li>

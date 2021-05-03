@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductForm;
-use App\Product;
+use App\Cart;
 use Exception;
+use App\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProductForm;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
@@ -55,6 +57,17 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+
+    ///
+    public function inCart($id)
+    {
+        $item = Cart::where(['product_id' => $id,  'user_id' => Auth::user()->id])->get();
+        if ($item->isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+    ///
     /**
      * Display the specified resource.
      *
@@ -65,6 +78,11 @@ class ProductController extends Controller
     {
         try {
             $products = Product::paginate(6);
+            if (Auth::check()) {
+                foreach ($products as $product) {
+                    $product->incart = $this->inCart($product->id);
+                }
+            }
         } catch (QueryException $e) {
             return view('errors.database', ['error' => "Error connecting to database"]);
         }
@@ -76,6 +94,9 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+            if (Auth::check()) {
+                $product->incart = $this->inCart($product->id);
+            }
         } catch (QueryException $e) {
             return view('errors.database', ['error' => "Error connecting to database"]);
         } catch (ModelNotFoundException $e) {
@@ -115,8 +136,8 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $product = Product::where('id', $request->id);
-       
-        
+
+
 
         $path = $product->get()[0]->image;
         if ($request->image) {
@@ -127,9 +148,9 @@ class ProductController extends Controller
             $path = '/uploads/' . $name;
         }
 
-        
+
         $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
-        \Session::flash('message' , "Updated Successfully");
+        \Session::flash('message', "Updated Successfully");
         return redirect()->back();
     }
 

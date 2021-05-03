@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@inject('cart', 'App\Http\Controllers\CartController')
+
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
@@ -19,11 +19,11 @@
                         <li class="py-3 list-group-item">
                             <h2> Order Summary </h2>
                         </li>
-                        @foreach (Auth::user()->cart()->get() as $item)
+                        @foreach ($cart as $item)
                         <li class="py-3 list-group-item d-flex justify-content-between align-items-center">
-                            <img src="{{$cart->getProduct($item->product_id)->image}}" alt="prd-img" height="100" width="100">
-                                <span>{{ $cart->getProduct($item->product_id)->name }}</span>
-                                <span> ₹ {{ $cart->getProduct($item->product_id)->price }}</span>
+                            <img src="{{$cart->product->image}}" alt="prd-img" height="100" width="100">
+                                <span>{{ $cart->product->name }}</span>
+                                <span> ₹ {{ $cart->product->price }}</span>
                                 <span> Qty : {{ $item->qty  }}</span>
                             </li>
                         @endforeach
@@ -35,7 +35,7 @@
                 <div class="col-md-5">
                     <ul class="list-group py-3">
                         <li class="py-3 list-group-item">
-                            <h3> Amount : ₹ {{ $cart->total() + ( $cart->total() * 0.18 ) + 50 }}</h3>
+                            <h3> Amount : ₹ {{ $total + ( $total * 0.18 ) + 50 }}</h3>
 
                         </li>
                         <li class="py-3 list-group-item">

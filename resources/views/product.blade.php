@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@inject('cart', 'App\Http\Controllers\CartController')
+
 @section('content')
     
     <div class="album py-5 bg-light">
@@ -11,7 +11,7 @@
                     </div>
                     <div class="row my-3">
                         <div class="col-md-6">
-                            @if (!Auth::guest() && $cart->inCart($product->id))
+                            @if (!Auth::guest() && $product->incart)
                                 <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Go to
                                     Cart</button>
 
@@ -30,7 +30,7 @@
 
                         </div>
                         <div class="col-md-6">
-                            @if (!Auth::guest() && $cart->inCart($product->id))
+                            @if (!Auth::guest() &&  $product->incart)
                                 <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Product Already
                                     Present in
                                     Cart</button>

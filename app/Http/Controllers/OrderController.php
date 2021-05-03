@@ -46,11 +46,17 @@ class OrderController extends Controller
 
         try {
             foreach (Auth::user()->cart()->get() as $item) {
-                Order::create([
-                    'user_id' =>  Auth::user()->id,
-                    'product_id' => $item->product_id,
-                    'qty' => $item->qty
-                ]);
+                $product = Product::find($item->product_id);
+                if( $product->qty >=  $item->qty ){
+                    Order::create([
+                        'user_id' =>  Auth::user()->id,
+                        'product_id' => $item->product_id,
+                        'qty' => $item->qty
+                    ]);
+                }else{
+                    return "invalid request";
+                }
+                
             }
 
             foreach (Auth::user()->cart()->get() as $item) {

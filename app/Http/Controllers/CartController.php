@@ -29,15 +29,14 @@ class CartController extends Controller
         // prodid -> prod
         try {
             $items = Cart::where('user_id', Auth::user()->id)->get();
-            $products = [];
             foreach ($items as $item) {
-                $products[] =  Product::where('id', $item->product_id);
+                $item->product =  Product::where('id', $item->product_id)->get()[0];
             }
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-
-        return view('user.cart', compact('products'));
+        $total = $this->total();
+        return view('user.cart', ['items' => $items , 'total' => $total]);
     }
 
 
@@ -103,7 +102,10 @@ class CartController extends Controller
     public function update(Request $request)
     {
         try {
-            Auth::user()->cart->where('product_id', $request->id)->update(['qty' => $request->qty]);
+            $product = $this->getProduct($request->id);
+            if ($product->qty >=  $request->qty) {
+                Auth::user()->cart->where('product_id', $request->id)->update(['qty' => $request->qty]);
+            }
             return redirect()->back();
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
