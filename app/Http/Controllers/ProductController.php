@@ -137,8 +137,6 @@ class ProductController extends Controller
     {
         $product = Product::where('id', $request->id);
 
-
-
         $path = $product->get()[0]->image;
         if ($request->image) {
             $extension = "." . $request->image->getClientOriginalExtension();
@@ -148,8 +146,9 @@ class ProductController extends Controller
             $path = '/uploads/' . $name;
         }
 
-
-        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
+        $product->updateProduct($request->name , $request->description , $request->price , $request->quantity , $path);
+        
+        
         \Session::flash('message', "Updated Successfully");
         return redirect()->back();
     }

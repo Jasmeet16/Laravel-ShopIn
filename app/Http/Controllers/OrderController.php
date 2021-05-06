@@ -43,33 +43,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
+             // to show order summary
+            $orders =[];
+
             foreach (Auth::user()->cart()->get() as $item) {
                 $product = Product::find($item->product_id);
-                if( $product->qty >=  $item->qty ){
-                    Order::create([
+                if( $product->qty >=  $item->qty && $item->qty >= 1 ){
+                    $orders[] = Order::create([
                         'user_id' =>  Auth::user()->id,
                         'product_id' => $item->product_id,
                         'qty' => $item->qty
                     ]);
+                    $product->qty = $product->qty - $item->qty;
+                    $product->save();
                 }else{
                     return "invalid request";
                 }
-                
             }
 
-            foreach (Auth::user()->cart()->get() as $item) {
-                $product = Product::find($item->product_id);
-                $product->qty = $product->qty - $item->qty;
-                $product->save();
-            }
             Auth::user()->cart()->delete();
 
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-        return view('user.congratulation');
+        return view('user.congratulation' , compact('orders'));
     }
 
     /**
@@ -81,7 +79,12 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         try {
-            $orders = Order::where('user_id', Auth::user()->id)->get();
+            // $orders = Order::where('user_id', Auth::user()->id)->get();
+            $orders = Order::join( 'products' , function($join){
+                $join->on('orders.product_id' , '=' , 'products.id')->where('orders.user_id', Auth::user()->id);
+            })->select( '*' , 'orders.qty as orderqty')->get();
+           
+            
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
@@ -127,7 +130,7 @@ class OrderController extends Controller
         $order = Order::find($order_id);
        
         if($status == 1){
-            $newStatus = "pending";
+            $newStatus = "Pending";
         }else if( $status == 2 ){
             $newStatus = "Confirmed";
         }else if( $status == 3 ){

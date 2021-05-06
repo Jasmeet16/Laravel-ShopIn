@@ -21,10 +21,10 @@
                         </li>
                         @foreach ($cart as $item)
                         <li class="py-3 list-group-item d-flex justify-content-between align-items-center">
-                            <img src="{{$cart->product->image}}" alt="prd-img" height="100" width="100">
-                                <span>{{ $cart->product->name }}</span>
-                                <span> ₹ {{ $cart->product->price }}</span>
-                                <span> Qty : {{ $item->qty  }}</span>
+                            <img src="{{$item->image}}" alt="prd-img" height="100" width="100">
+                                <span>{{ $item->name }}</span>
+                                <span> ₹ {{ $item->price }}</span>
+                                <span> Qty : {{ $item->cartqty  }}</span>
                             </li>
                         @endforeach
                     </ul>

@@ -15,10 +15,10 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('product_id');
-            $table->integer('qty');
-            $table->string('status')->default('Pending');
+            $table->integer('user_id')->comment("User id to which the order belongs to");
+            $table->integer('product_id')->comment("Ordered products id");
+            $table->integer('qty')->comment("Number of quantity ordered");
+            $table->string('status')->default('Pending')->comment("Current status of the order");
             $table->timestamps();
         });
     }

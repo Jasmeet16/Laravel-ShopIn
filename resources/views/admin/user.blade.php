@@ -17,8 +17,8 @@
                                 <li class="py-3 list-group-item  d-flex justify-content-between">
                                     <p><strong> Order Id : </strong> {{ $order->id }} </p>
                                     <p><strong>Product Id. : </strong> {{ $order->product_id }} </p>
-                                    <p><strong>Name : </strong> {{ $order->product->name }} </p>
-                                    <p><strong>Qty : </strong> {{ $order->qty }} </p>
+                                    <p><strong>Name : </strong> {{ $order->name }} </p>
+                                    <p><strong>Qty : </strong> {{ $order->orderqty }} </p>
                                 </li>
                             @endforeach
                         @endif

@@ -31,7 +31,7 @@
                     @foreach ($orders as $order)
                         {{-- {{ $order }} --}}
                         <tr>
-                            <td class='text-center'>{{ $order->id }}</td>
+                            <td class='text-center align-center'>{{ $order->id }}</td>
                             <td class='text-center'>{{ $order->product_id }}</td>
                             <td class='text-center'>{{ $order->qty }}</td>
                             <td class='text-center'>
@@ -56,7 +56,7 @@
                                     <div class="alert alert-info" id="status{{ $order->id }}">
                                         {{ $order->status }}
                                     </div>
-                                @elseif ($order->status == 'pending')
+                                @elseif ($order->status == 'Pending')
                                     <div class="alert alert-danger" id="status{{ $order->id }}">
                                         {{ $order->status }}
                                     </div>

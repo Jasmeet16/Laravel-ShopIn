@@ -24,7 +24,7 @@
                     <td class='text-center' >{{$product->qty}}</td>
                     <td class='text-center' >  
                       <div class="d-flex justify-content-center">
-                        <form action="{{'products'}}/{{$product->id}}" method="POST">
+                        <form action="{{'products'}}/{{$product->id}}" class="delete-form" id="delete-form-{{$product->id}}" method="POST">
                           {{ csrf_field() }}
                           {{ method_field('DELETE') }}
                         <button class="btn btn-sm btn-danger " type="submit">Delete</button>
@@ -40,6 +40,16 @@
             </table>
           
     </main>
+
+    <script>
+      $('.delete-form').submit(function(e){
+        e.preventDefault();
+        let check = window.confirm('Are you sure you want this product removed');
+        if(check){
+          this.submit();
+        }
+      })
+    </script>
 @endsection
 
 @section('footer')

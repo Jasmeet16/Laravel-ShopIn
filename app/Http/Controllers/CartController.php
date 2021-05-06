@@ -28,15 +28,23 @@ class CartController extends Controller
         // cartitems -> prodid
         // prodid -> prod
         try {
-            $items = Cart::where('user_id', Auth::user()->id)->get();
+            //qty defines total items in stock
+            // cartquantity defines seleted qty by user 
+
+            $items = Cart::join('products', function ($join) {
+                $join->on('carts.product_id', '=', 'products.id')->where('carts.user_id', '=',  Auth::user()->id);
+            })->select('*', 'carts.qty as cartquantity')->get();
+
+            $total = 0;
+
             foreach ($items as $item) {
-                $item->product =  Product::where('id', $item->product_id)->get()[0];
+                $total += $item->price * $item->cartquantity;
             }
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-        $total = $this->total();
-        return view('user.cart', ['items' => $items , 'total' => $total]);
+
+        return view('user.cart', ['items' => $items, 'total' => $total]);
     }
 
 
@@ -103,10 +111,18 @@ class CartController extends Controller
     {
         try {
             $product = $this->getProduct($request->id);
-            if ($product->qty >=  $request->qty) {
+            if ($product->qty >=  $request->qty && $request->qty >= 1) {
                 Auth::user()->cart->where('product_id', $request->id)->update(['qty' => $request->qty]);
+            } else {
+                return response()->json([
+                    'updated' => false,
+                    'state' => "only " . $product->qty . " items in stock"
+                ]);
             }
-            return redirect()->back();
+            return response()->json([
+                'updated' => true,
+                'state' => $request->qty
+            ]);
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
@@ -133,15 +149,24 @@ class CartController extends Controller
 
     public function total()
     {
-        $total = 0;
-        $items = Cart::where('user_id', Auth::user()->id)->get();
+        try {
+           
+            $items = Cart::join('products', function ($join) {
+                $join->on('carts.product_id', '=', 'products.id')->where('carts.user_id', '=',  Auth::user()->id);
+            })->select('*', 'carts.qty as cartquantity')->get();
 
-        foreach ($items as $item) {
-            $product =  Product::where('id', $item->product_id)->get();
-            $total += $product[0]->price * $item->qty;
+            $total = 0;
+
+            foreach ($items as $item) {
+                $total += $item->price * $item->cartquantity;
+            }
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
+
         return $total;
     }
+
 
     public function selectedQty($id)
     {
@@ -149,14 +174,7 @@ class CartController extends Controller
         return $item[0]->qty;
     }
 
-    public function inCart($id)
-    {
-        $item = Cart::where(['product_id' => $id,  'user_id' => Auth::user()->id])->get();
-        if ($item->isEmpty()) {
-            return false;
-        }
-        return true;
-    }
+    
 
     public function getProduct($id)
     {

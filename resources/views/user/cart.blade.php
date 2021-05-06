@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
+
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
@@ -13,21 +14,21 @@
                             <div class="alert alert-danger"> Cart is empty</div>
                         @endif
                         @foreach ($items as $item)
-                            
-                            <li class="py-3 list-group-item d-flex justify-content-between align-items-center cart"
-                                id="{{ $item->product->id }}">
 
-                                <img src="{{ $item->product->image }}" alt="prd-img" height="100" width="100">
-                                <span>{{ $item->product->name }}</span>
-                                <span> ₹ {{ $item->product->price }}</span>
-                                <span id='qty-{{ $item->product->id }}'> Qty :
-                                    {{ $item->qty }}</span>
-                                <form action="{{ url('cart/' . $item->product->id) }}" method="POST">
+                            <li class="py-3 list-group-item d-flex justify-content-between align-items-center cart"
+                                id="{{ $item->product_id }}">
+
+                                <img src="{{ $item->image }}" alt="prd-img" height="100" width="100">
+                                <span>{{ $item->name }}</span>
+                                <span> ₹ {{ $item->price }}</span>
+                                <span id='qty-{{ $item->product_id }}'> Qty :
+                                    {{ $item->cartquantity }}</span>
+                                <form action="{{ url('cart/' . $item->product_id) }}" method="POST">
                                     {{ csrf_field() }}
                                     <select class="form-control select-qty" name="qty">
                                         <option value="" selected disabled hidden>Change Qty</option>
-                                        @for ($i = 1; $i <= $item->product->qty; $i++)
-                                            <option value="{{ $i }}" id="{{ $item->product->id }}">
+                                        @for ($i = 1; $i <= $item->qty; $i++)
+                                            <option value="{{ $i }}" id="{{ $item->product_id }}">
                                                 {{ $i }}</option>
                                         @endfor
 
@@ -36,8 +37,9 @@
                                 <form class="delete-prod" action="{{ url('cart') }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <input type="hidden" class='prod_id' value="{{ $item->product->id }}">
-                                    <button class="btn btn-danger btn-sm" type="submit"><i class="far fa-trash-alt"></i></button>
+                                    <input type="hidden" class='prod_id' value="{{ $item->product_id }}">
+                                    <button class="btn btn-danger btn-sm" type="submit"><i
+                                            class="far fa-trash-alt"></i></button>
                                 </form>
                             </li>
                         @endforeach
@@ -50,7 +52,8 @@
                         <li class="list-group-item text-center">
                             <ul class="list-group-flush p-2">
                                 <li class="py-2 list-group-item">
-                                    <span style="font-size:1rem"><strong id="total"> Cart Total : ₹ {{ $total }} </strong></span>
+                                    <span style="font-size:1rem"><strong id="total"> Cart Total : ₹ {{ $total }}
+                                        </strong></span>
                                 </li>
                                 <li class="py-2 list-group-item">
                                     <span>GST : 18 % </span>
@@ -65,7 +68,7 @@
                             </ul>
                         </li>
                         <li class="py-3 list-group-item">
-                            <a type="button"  class="btn btn-dark w-100 py-3 <?php if ($total == 0) {
+                            <a type="button" class="btn btn-dark w-100 py-3 <?php if ($total == 0) {
                                     echo 'disabled';
                                 } ?>" href="{{ url('/cart/checkout/profile') }}">Proceed</a>
                         </li>
@@ -105,10 +108,13 @@
                             success: function(data) {
                                 $(`#${prod_id}`).remove();
                                 $(`#total`).text("Total : " + data);
-                                let extraCharge = ((parseInt(data) * 18) / 100).toFixed(2);
+                                let extraCharge = ((parseInt(data) * 18) / 100)
+                                    .toFixed(2);
                                 //console.log( parseInt(data) + parseInt(extraCharge) + 50);
-                                let grossTotal = parseInt(data) + parseInt(extraCharge) + 50;
-                                $(`#gross-total`).text(`Gross Total : ₹` +grossTotal);
+                                let grossTotal = parseInt(data) + parseInt(
+                                    extraCharge) + 50;
+                                $(`#gross-total`).text(`Gross Total : ₹` +
+                                    grossTotal);
                             }
                         });
                     }
@@ -129,23 +135,28 @@
                         "id": prod_id,
                         "qty": val
                     },
-                    success: function() {
-                        $(`#qty-${prod_id}`).text("Qty : " + val);
-                        $.ajax({
-                            url: "/carttotal",
-                            type: "GET",
-                            data: {},
-                            success: function(data) {
-                                $(`#total`).text("Total : " + data);
-                                let extraCharge = ((parseInt(data) * 18) / 100)
-                                    .toFixed(2);
-                                //console.log( parseInt(data) + parseInt(extraCharge) + 50);
-                                let grossTotal = parseInt(data) + parseInt(
-                                    extraCharge) + 50;
-                                $(`#gross-total`).text(`Gross Total : ₹` +
-                                    grossTotal);
-                            }
-                        });
+                    success: function(response) {
+                        if (response.updated) {
+                            $(`#qty-${prod_id}`).text("Qty : " + response.state);
+                            $.ajax({
+                                url: "/carttotal",
+                                type: "GET",
+                                data: {},
+                                success: function(data) {
+                                    $(`#total`).text("Total : " + data);
+                                    let extraCharge = ((parseInt(data) * 18) / 100)
+                                        .toFixed(2);
+                                    //console.log( parseInt(data) + parseInt(extraCharge) + 50);
+                                    let grossTotal = parseInt(data) + parseInt(
+                                        extraCharge) + 50;
+                                    $(`#gross-total`).text(`Gross Total : ₹` +
+                                        grossTotal);
+                                }
+                            });
+                        }else{
+                            alert(response.state);
+                        }
+
                     }
 
                 });

@@ -14,11 +14,11 @@ class CreateProfilesTable extends Migration
     public function up()
     {
         Schema::create('profiles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('name')->nullalble();
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
+            $table->increments('id')->comment("Profiles id");
+            $table->integer('user_id')->comment("Users Id to which profile is linked");
+            $table->string('name')->nullalble()->comment("Users name");
+            $table->string('phone')->nullable()->comment("users phone number");
+            $table->string('address')->nullable()->comment("Users home address");
             $table->timestamps();
         });
     }

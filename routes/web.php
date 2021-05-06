@@ -67,13 +67,8 @@ Route::get('/orders', 'OrderController@show');
 
 
 // database 
-
 // validations on qty
-
 // auth
-
 // route
-
 // mvc
-
 // blade inject bad

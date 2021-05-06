@@ -10,17 +10,17 @@
                         <img src="{{ $product->image }}" alt="{{ $product->name }}">
                     </div>
                     <div class="row my-3">
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="buynow-form">
                             @if (!Auth::guest() && $product->incart)
-                                <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Go to
-                                    Cart</button>
+                                <a href="{{ url('/cart') }}" type="button" class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" >Go to
+                                    Cart</a>
 
                             @elseif ( !Auth::guest() && $product->qty <= 0)<button class='btn btn-dark w-100 py-3'
                                     id="cart-btn" type="submit" disabled>Product
                                     Out of Stock
                                     </button>
                                 @else
-                                    <form action="{{ url('products/cart') }}" method="POST">
+                                    <form action="{{ url('products/cart') }}"  method="POST">
                                         {{ csrf_field() }}
                                         <input type="hidden" class='prod_id' name="id" value="{{ $product->id }}">
                                         <button class='btn btn-dark w-100 py-3' id="buy-now" type="submit"> <i
@@ -29,7 +29,7 @@
                             @endif
 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" >
                             @if (!Auth::guest() &&  $product->incart)
                                 <button class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" disabled>Product Already
                                     Present in
@@ -90,10 +90,9 @@
                 },
                 success: function() {
                     $('#cart-btn').text('Product Added');
-                    $("#buy-now").prop({
-                        disabled: true
-                    });
                     document.getElementById(`cart-btn`).disabled = true;
+                    $("#buynow-form").html(`<a href="{{ url('/cart') }}" type="button" class='btn btn-dark w-100 py-3' id="cart-btn" type="submit" >Go to Cart</a>`);
+                    
                 },
                 error: function() {
                     alert('You must be logged in');

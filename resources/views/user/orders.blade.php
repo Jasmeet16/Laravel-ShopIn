@@ -1,5 +1,5 @@
 @extends( 'layouts.layout' )
-@inject('cart', 'App\Http\Controllers\CartController')
+
 @section('content')
 
     <div class="album py-5 bg-light">
@@ -19,11 +19,11 @@
                     <tbody>
                         @foreach ($orders as $order)
                             <tr class="align-self-center">
-                                <td> <img src="{{ $cart->getProduct($order->product_id)->image }}" alt="thumbnail"
+                                <td> <img src="{{ $order->image }}" alt="thumbnail"
                                         height="150px" width="150px"> </td>
-                                <td>{{ $cart->getProduct($order->product_id)->name }}</td>
-                                <td>{{ $cart->getProduct($order->product_id)->price }}</td>
-                                <td>{{ $order->qty }}</td>
+                                <td>{{ $order->name }}</td>
+                                <td>{{ $order->price }}</td>
+                                <td>{{ $order->orderqty }}</td>
                                 <td>
                                     @if ($order->status == 'Confirmed')
                                         <div class="alert alert-success" style="width:40%" id="status{{ $order->id }}">
@@ -37,7 +37,7 @@
                                         <div class="alert alert-info" style="width:40%" id="status{{ $order->id }}">
                                             {{ $order->status }}
                                         </div>
-                                    @elseif ($order->status == 'pending')
+                                    @elseif ($order->status == 'Pending')
                                         <div class="alert alert-danger" style="width:40%" id="status{{ $order->id }}">
                                             {{ $order->status }}
                                         </div>
