@@ -31,10 +31,12 @@ class CartController extends Controller
             //qty defines total items in stock
             // cartquantity defines seleted qty by user 
 
-            $items = Cart::join('products', function ($join) {
-                $join->on('carts.product_id', '=', 'products.id')->where('carts.user_id', '=',  Auth::user()->id);
-            })->select('*', 'carts.qty as cartquantity')->get();
+            //items = products in loggged in users cart
+            $items = new Cart();
+            $items = $items->getCartItems();
+           // dd($items);
 
+           //total = total price
             $total = 0;
 
             foreach ($items as $item) {
@@ -67,13 +69,14 @@ class CartController extends Controller
     public function store(Request $request)
     {
         try {
-            Cart::create([
-                'user_id' => Auth::user()->id,
-                'product_id' => $request->id,
-                'qty' => 1
-            ]);
+            $item = new Cart();
+            $item->storeProduct($request->id);
+
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
+        }
+        if($request->ajax()){
+            return;
         }
         return redirect('/cart');
     }
@@ -110,9 +113,11 @@ class CartController extends Controller
     public function update(Request $request)
     {
         try {
+            //to update the quantity
             $product = $this->getProduct($request->id);
+
             if ($product->qty >=  $request->qty && $request->qty >= 1) {
-                Auth::user()->cart->where('product_id', $request->id)->update(['qty' => $request->qty]);
+                Auth::user()->cart->updateQuantity($request->id , $request->qty);
             } else {
                 return response()->json([
                     'updated' => false,
@@ -137,7 +142,8 @@ class CartController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $prod = Auth::user()->cart()->where('product_id', $request->id)->get();
+            //fetching product id
+            $prod =  Auth::user()->cart->getProductFromCart($request->id);
             Cart::destroy($prod[0]->id);
             return $prod;
         } catch (\Exception $e) {
@@ -150,10 +156,8 @@ class CartController extends Controller
     public function total()
     {
         try {
-           
-            $items = Cart::join('products', function ($join) {
-                $join->on('carts.product_id', '=', 'products.id')->where('carts.user_id', '=',  Auth::user()->id);
-            })->select('*', 'carts.qty as cartquantity')->get();
+           // sum of price of all the items in cart
+            $items = Auth::user()->cart->getCartItems();
 
             $total = 0;
 
@@ -168,11 +172,7 @@ class CartController extends Controller
     }
 
 
-    public function selectedQty($id)
-    {
-        $item = Cart::where('product_id', $id)->get();
-        return $item[0]->qty;
-    }
+
 
     
 

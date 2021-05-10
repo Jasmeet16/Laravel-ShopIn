@@ -59,13 +59,10 @@ class ProductController extends Controller
 
 
     ///
-    public function inCart($id)
+    public function inCart()
     {
-        $item = Cart::where(['product_id' => $id,  'user_id' => Auth::user()->id])->get();
-        if ($item->isEmpty()) {
-            return false;
-        }
-        return true;
+        $item = Cart::productInCart();
+        return $item;
     }
     ///
     /**
@@ -78,13 +75,24 @@ class ProductController extends Controller
     {
         try {
             $products = Product::paginate(6);
+            //getting all the items present in cart against logged in userid
+            $cartItems = $this->inCart($product->id);
+           
+            //getting all the product ids present in cart 
+            $cartItemProdId = [];
+            foreach ($cartItems as $cartItem) {
+                $cartItemProdId[] = $cartItem->product_id;
+            }
+            
             if (Auth::check()) {
                 foreach ($products as $product) {
-                    $product->incart = $this->inCart($product->id);
+                    $product->incart = in_array($product->id, $cartItemProdId);
                 }
             }
         } catch (QueryException $e) {
             return view('errors.database', ['error' => "Error connecting to database"]);
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
         return view('home', compact('products'));
     }
@@ -93,13 +101,15 @@ class ProductController extends Controller
     public function showsingle($id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = Product::getProduct($id);
             if (Auth::check()) {
                 $product->incart = $this->inCart($product->id);
             }
         } catch (QueryException $e) {
             return view('errors.database', ['error' => "Error connecting to database"]);
         } catch (ModelNotFoundException $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
 
@@ -129,13 +139,13 @@ class ProductController extends Controller
 
     public function updateShowForm($id)
     {
-        $product = Product::find($id);
+        $product = Product::getProduct($id);
         return view('admin.updateProduct', compact('product'));
     }
 
     public function update(Request $request)
     {
-        $product = Product::where('id', $request->id);
+        $product = Product::getProduct($request->id);
 
         $path = $product->get()[0]->image;
         if ($request->image) {
@@ -146,9 +156,9 @@ class ProductController extends Controller
             $path = '/uploads/' . $name;
         }
 
-        $product->updateProduct($request->name , $request->description , $request->price , $request->quantity , $path);
-        
-        
+        $product->updateProduct($request->name, $request->description, $request->price, $request->quantity, $path);
+
+
         \Session::flash('message', "Updated Successfully");
         return redirect()->back();
     }

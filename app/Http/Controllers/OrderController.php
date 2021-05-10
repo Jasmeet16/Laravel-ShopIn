@@ -48,13 +48,11 @@ class OrderController extends Controller
             $orders =[];
 
             foreach (Auth::user()->cart()->get() as $item) {
-                $product = Product::find($item->product_id);
+                
+                $product = Order::getProduct($item->product_id);
+                
                 if( $product->qty >=  $item->qty && $item->qty >= 1 ){
-                    $orders[] = Order::create([
-                        'user_id' =>  Auth::user()->id,
-                        'product_id' => $item->product_id,
-                        'qty' => $item->qty
-                    ]);
+                    $orders[] = (new Order)->makeOrder( $item->product_id , $item->qty );
                     $product->qty = $product->qty - $item->qty;
                     $product->save();
                 }else{
@@ -80,11 +78,8 @@ class OrderController extends Controller
     {
         try {
             // $orders = Order::where('user_id', Auth::user()->id)->get();
-            $orders = Order::join( 'products' , function($join){
-                $join->on('orders.product_id' , '=' , 'products.id')->where('orders.user_id', Auth::user()->id);
-            })->select( '*' , 'orders.qty as orderqty')->get();
+            $orders = Order::getOrders();
            
-            
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }

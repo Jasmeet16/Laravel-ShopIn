@@ -12,4 +12,11 @@ class Product extends Model
     public function updateProduct($name , $description , $price , $quantity , $path){
         $this->update(['name' => $name, 'description' => $description, 'price' => $price, 'qty' => $quantity, 'image' => $path]);
     } 
+
+    public static function getProduct($id){
+        return Product::findOrFail($id);
+    }
+
+    
+
 }

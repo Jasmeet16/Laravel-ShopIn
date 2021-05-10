@@ -3,6 +3,7 @@
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
+            @include('error')
             <div class="row">
                 <div class="col-md-6">
                     <ul class="list-group py-3">
@@ -24,7 +25,7 @@
                             <img src="{{$item->image}}" alt="prd-img" height="100" width="100">
                                 <span>{{ $item->name }}</span>
                                 <span> ₹ {{ $item->price }}</span>
-                                <span> Qty : {{ $item->cartqty  }}</span>
+                                <span> Qty : {{ $item->cartquantity  }}</span>
                             </li>
                         @endforeach
                     </ul>

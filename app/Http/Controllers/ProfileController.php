@@ -31,30 +31,31 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
 
- 
+
     public function create()
     {
-
-        if (Auth::user()->profile()->get()->isNotEmpty()) {
-           
-            
-            // foreach( $cart as $item ){
-            //     $item->product = $this->getProduct( $item->product_id );
-            // }
-            $carts =  Auth::user()->cart()->join( 'products' , function($join){
-                $join->on( 'carts.product_id' , '=' , 'products.id' );
-            })->select('*' , 'carts.qty as cartqty')->get();
+        try {
+            if (Auth::user()->profile()->get()->isNotEmpty()) {
 
 
-            $total = 0;
-            foreach ($carts as $item) {
-                $total += $item->price * $item->cartqty;
+                if( Auth::user()->cart == null ){
+                    return view('errors.database', ['error' =>"No Items present in Cart"]);
+                } 
+                $carts =  Auth::user()->cart->getCartItems();
+
+
+                $total = 0;
+                foreach ($carts as $item) {
+                    $total += $item->price * $item->cartquantity;
+                }
+
+
+                return view('user.checkout', ['cart' => $carts, 'total' => $total]);
             }
-
-            
-            return view('user.checkout' , ['cart' => $carts , 'total' => $this->total()]);
+            return view('user.profile');
+        } catch (\Exception $e) {
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
-        return view('user.profile');
     }
 
     /**
@@ -71,7 +72,7 @@ class ProfileController extends Controller
             }
             $form->persist();
         } catch (\Exception $e) {
-            dd($e);
+            return view('errors.database', ['error' => $e->getMessage()]);
         }
         return redirect('/cart/checkout/profile');
     }

@@ -52,16 +52,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $userOrders = Order::where('user_id' , $user->id);
+        $user = User::getUser($id);
+        $orders = Order::getUsersOrders($user->id);
         // foreach( $orders as $order ){
         //     $order->product = Product::find($order->product_id);
         // }
-        $orders = $userOrders->join( 'products' , function($join){
-            $join->on( 'orders.product_id' , '=' , 'products.id' );
-        } )->select('*' , 'orders.qty as orderqty')->get();
+       
 
-        $profile = Profile::where( 'user_id' , $user->id )->get();
+        $profile = Profile::getProfile($user->id);
 
         return view( 'admin.user' , [ 'user'=> $user , 'orders' => $orders  , 'profile' => $profile] );
     }
