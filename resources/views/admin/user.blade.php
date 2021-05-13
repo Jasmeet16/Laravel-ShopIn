@@ -14,8 +14,9 @@
                             </div>
                         @else
                             @foreach ($orders as $order)
-                                <li class="py-3 list-group-item  d-flex justify-content-between">
-                                    <p><strong> Order Id : </strong> {{ $order->id }} </p>
+                                <li class="py-3 list-group-item  d-flex justify-content-between align-items-center">
+                                    <img src="{{$order->image}}" alt="order-img" height="100px" width="100px">
+                                    <p><strong> Order Id : </strong> {{ $order->orderId }} </p>
                                     <p><strong>Product Id. : </strong> {{ $order->product_id }} </p>
                                     <p><strong>Name : </strong> {{ $order->name }} </p>
                                     <p><strong>Qty : </strong> {{ $order->orderqty }} </p>

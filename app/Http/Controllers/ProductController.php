@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
+use App\Category;
+use App\CategoryName;
 use Exception;
 use App\Product;
 use Illuminate\Http\Request;
@@ -37,7 +39,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
+        $categories = CategoryName::all();
+        return view('admin.create', compact('categories'));
     }
 
     /**
@@ -71,20 +74,21 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show()
     {
         try {
+            $categories = CategoryName::all();
             $products = Product::paginate(6);
-            //getting all the items present in cart against logged in userid
-            $cartItems = $this->inCart($product->id);
-           
-            //getting all the product ids present in cart 
-            $cartItemProdId = [];
-            foreach ($cartItems as $cartItem) {
-                $cartItemProdId[] = $cartItem->product_id;
-            }
-            
             if (Auth::check()) {
+                //getting all the items present in cart against logged in userid
+                $cartItems = $this->inCart();
+
+                //getting all the product ids present in cart 
+                $cartItemProdId = [];
+                foreach ($cartItems as $cartItem) {
+                    $cartItemProdId[] = $cartItem->product_id;
+                }
+
                 foreach ($products as $product) {
                     $product->incart = in_array($product->id, $cartItemProdId);
                 }
@@ -94,7 +98,26 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-        return view('home', compact('products'));
+        return view('home', compact('products'), compact('categories'));
+    }
+
+    public function filterProducts($id)
+    {
+        try {
+            $categories = CategoryName::all();
+            if ($id > count($categories)) {
+                return view('errors.database', ['error' => "Invalid category id"]);
+            }
+            $filteredProducts = Product::getFilteredProducts($id);
+
+            if (count($filteredProducts) != 0) {
+                return view('home', ['products' => $filteredProducts, 'categories' => $categories]);
+            } else {
+                return view('errors.database', ['error' => "No products for this category"]);
+            }
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
 
@@ -103,7 +126,7 @@ class ProductController extends Controller
         try {
             $product = Product::getProduct($id);
             if (Auth::check()) {
-                $product->incart = $this->inCart($product->id);
+                $product->incart = Cart::inCart($product->id);
             }
         } catch (QueryException $e) {
             return view('errors.database', ['error' => "Error connecting to database"]);

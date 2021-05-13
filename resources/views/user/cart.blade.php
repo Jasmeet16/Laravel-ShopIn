@@ -68,7 +68,7 @@
                             </ul>
                         </li>
                         <li class="py-3 list-group-item">
-                            <a type="button" class="btn btn-dark w-100 py-3 <?php if ($total == 0) {
+                            <a type="button" id="proceed" class="btn btn-dark w-100 py-3 <?php if ($total == 0) {
                                     echo 'disabled';
                                 } ?>" href="{{ url('/cart/checkout/profile') }}">Proceed</a>
                         </li>
@@ -115,6 +115,9 @@
                                     extraCharge) + 50;
                                 $(`#gross-total`).text(`Gross Total : ₹` +
                                     grossTotal);
+                                if (data == 0) {
+                                    console.log( document.getElementById(`proceed`));
+                                }
                             }
                         });
                     }
@@ -153,7 +156,7 @@
                                         grossTotal);
                                 }
                             });
-                        }else{
+                        } else {
                             alert(response.state);
                         }
 

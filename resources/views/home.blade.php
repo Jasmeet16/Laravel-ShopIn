@@ -1,11 +1,23 @@
 @extends('layouts.layout')
+@section('dropdown')
 
+    <div class="dropdown">
+        <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter Category
+          </a>
+        <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
+            @foreach ($categories as $category)
+                <a class="dropdown-item " href="/categories/{{$category->id}}">{{$category->cat_name}}</a>
+            @endforeach
+        </div>
+    </div>
+@endsection
 @section('content')
     <div class="album py-5 bg-light">
         <div class="container">
 
 
-            @if ($products->currentPage() == 1)
+            @if ($products->currentPage() == 1 && Request::path() == '/')
                 @include('crousel')
             @endif
 
@@ -17,17 +29,17 @@
             <div class="row">
 
                 @foreach ($products as $product)
-                
+
                     <div class="col-md-4" style="margin: auto">
                         <div class="card h-100 mb-4 m-2 box-shadow ">
-                            <a href=" products/{{ $product->id }}">
+                            <a href="{{ url('products/' . $product->id) }}">
                                 <img class="card-img-top img-fluid" src="{{ url($product->image) }}" alt="product-image">
                             </a>
                             <div class="card-body">
-                               
-                                    <h3 class="card-text">{{ $product->name }}</h3>
-                                    <h6 class="card-text "> ₹ {{ $product->price }}</h6>
-                                
+
+                                <h3 class="card-text">{{ $product->name }}</h3>
+                                <h6 class="card-text "> ₹ {{ $product->price }}</h6>
+
                                 <div class="d-flex justify-content-between align-items-center buttons">
                                     @if (!Auth::guest() && $product->incart)
                                         <button class='btn btn-outline-secondary w-75' type="submit" disabled>
@@ -78,6 +90,7 @@
                 }
             })
         })
+
     </script>
 
 @endsection

@@ -45,6 +45,10 @@ class Cart extends Model
 
   public static function productInCart()
   {
+    
     return Cart::where(  'user_id' , Auth::user()->id)->get();
+  }
+  public static function inCart($id){
+    return Cart::where(  [ 'user_id' =>  Auth::user()->id , 'product_id' => $id ] )->get()->isNotEmpty();
   }
 }

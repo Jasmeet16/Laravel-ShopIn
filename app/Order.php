@@ -15,9 +15,10 @@ class Order extends Model
         return Product::find($id);
     }
 
-    public function makeOrder($product_id, $qty)
+    public function makeOrder($product_id, $qty , $new_order_no)
     {
         return Order::create([
+            'order_no' => $new_order_no,
             'user_id' =>  Auth::user()->id,
             'product_id' => $product_id,
             'qty' => $qty
@@ -36,7 +37,7 @@ class Order extends Model
             $userOrders = Order::where('user_id' , $user_id);
             return $userOrders->join( 'products' , function($join){
                $join->on( 'orders.product_id' , '=' , 'products.id' );
-           } )->select('*' , 'orders.qty as orderqty')->get();
+           } )->select('*' , 'orders.qty as orderqty' , 'orders.id as orderId')->get();
             
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);

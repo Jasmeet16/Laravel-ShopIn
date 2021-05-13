@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
 * {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 :root {
@@ -55,17 +55,16 @@ footer p {
   object-fit: cover;
   } */
 .card {
-  margin : auto;
+  margin: auto;
   border-radius: 5%;
 }
 .card-img-top {
   max-height: 25vh;
-  object-fit:contain;
+  object-fit: contain;
   padding: 10px;
-  
-}                                          
-.card-body{
-  flex-grow:0;
+}
+.card-body {
+  flex-grow: 0;
 }
 
 .box-shadow {
@@ -106,16 +105,29 @@ footer p {
   border-bottom-right-radius: 5px;
 }
 
-.card-text{
+.card-text {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-li.disabled{
+li.disabled {
   color: black;
   float: left;
   padding: 8px 16px;
   text-decoration: none;
   border: 1px solid #ddd;
+}
+.dropdown-menu {
+  background-color: #1e2125;
+}
+.dropdown-menu:hover {
+  background-color: #1e2125;
+}
+.dropdown-item:hover {
+ 
+}
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #1e2125;
+  color: #e9ecef;
 }

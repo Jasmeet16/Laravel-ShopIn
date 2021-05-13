@@ -156,14 +156,18 @@ class CartController extends Controller
     public function total()
     {
         try {
-           // sum of price of all the items in cart
-            $items = Auth::user()->cart->getCartItems();
-
             $total = 0;
 
-            foreach ($items as $item) {
-                $total += $item->price * $item->cartquantity;
+            if(  Auth::user()->cart ){
+                // sum of price of all the items in cart
+                $items = Auth::user()->cart->getCartItems();
+
+            
+                foreach ($items as $item) {
+                    $total += $item->price * $item->cartquantity;
+                }
             }
+           
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }

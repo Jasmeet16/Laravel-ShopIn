@@ -53,7 +53,8 @@
                 </strong>
             </a>
             @if (Auth::guest())
-                <div class="buttons">
+                <div class="buttons align-items-center">
+                  @yield('dropdown')
                     <a href="/login" class="navbar-brand d-flex align-items-center">
                         <strong>Login</strong>
                     </a>
@@ -62,7 +63,8 @@
                     </a>
                 </div>
             @else
-                <ul class="buttons" style="list-style-type:none;">
+                <ul class="buttons align-items-center" style="list-style-type:none;">
+                    @yield('dropdown')
                     <li>
                         @if (Auth::user()->admin)
                             <a href="{{ url('/admin') }}" role="button" aria-expanded="false">

@@ -17,6 +17,10 @@ class Product extends Model
         return Product::findOrFail($id);
     }
 
-    
+    public static function getFilteredProducts($id){
+        return Product::join('categories', function ($join) {
+            $join->on('products.id', '=', 'categories.prod_id');
+        })->select('*', 'products.id as id')->where('catName_id', $id)->paginate(2);
+    }
 
 }

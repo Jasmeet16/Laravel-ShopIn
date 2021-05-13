@@ -15,6 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('order_no')->comment("Order Number for a order");
             $table->integer('user_id')->comment("User id to which the order belongs to");
             $table->integer('product_id')->comment("Ordered products id");
             $table->integer('qty')->comment("Number of quantity ordered");

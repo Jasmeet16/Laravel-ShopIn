@@ -18,6 +18,9 @@ Auth::routes();
 
 Route::get('/products/{id}', 'ProductController@showsingle');
 
+Route::get('/categories/{id}', 'ProductController@filterProducts');
+
+
 Route::middleware(['auth', 'admin'])->group(function () {
     
     Route::prefix('admin')->group(function () {

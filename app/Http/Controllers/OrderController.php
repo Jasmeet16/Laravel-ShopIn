@@ -22,7 +22,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::paginate(10);
-        return view('admin.orders' , compact('orders'));
+        return view('admin.orders', compact('orders'));
     }
 
     /**
@@ -44,28 +44,31 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-             // to show order summary
-            $orders =[];
-
+            // to show order summary
+            $orders = [];
+            //preparing next order number
+            if(Order::latest()->first()){
+                $new_order_no = Order::latest()->first()->order_no + 1;
+            }else{
+                $new_order_no = 1;
+            }
+            //getting all the products from cart
             foreach (Auth::user()->cart()->get() as $item) {
-                
                 $product = Order::getProduct($item->product_id);
-                
-                if( $product->qty >=  $item->qty && $item->qty >= 1 ){
-                    $orders[] = (new Order)->makeOrder( $item->product_id , $item->qty );
+                if ($product->qty >=  $item->qty && $item->qty >= 1) {
+                    $orders[] = (new Order)->makeOrder($item->product_id, $item->qty , $new_order_no);
                     $product->qty = $product->qty - $item->qty;
                     $product->save();
-                }else{
+                } else {
                     return "invalid request";
                 }
             }
 
             Auth::user()->cart()->delete();
-
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
-        return view('user.congratulation' , compact('orders'));
+        return view('user.congratulation', compact('orders') , compact('new_order_no'));
     }
 
     /**
@@ -79,7 +82,6 @@ class OrderController extends Controller
         try {
             // $orders = Order::where('user_id', Auth::user()->id)->get();
             $orders = Order::getOrders();
-           
         } catch (\Exception $e) {
             return view('errors.database', ['error' => $e->getMessage()]);
         }
@@ -120,21 +122,21 @@ class OrderController extends Controller
         //
     }
 
-    public function status( $order_id , $status ){
-       
+    public function status($order_id, $status)
+    {
+
         $order = Order::find($order_id);
-       
-        if($status == 1){
+
+        if ($status == 1) {
             $newStatus = "Pending";
-        }else if( $status == 2 ){
+        } else if ($status == 2) {
             $newStatus = "Confirmed";
-        }else if( $status == 3 ){
+        } else if ($status == 3) {
             $newStatus = "Dispatched";
-        }else if( $status == 4 ){
+        } else if ($status == 4) {
             $newStatus = "Delivered";
         }
         $order->update(['status' => $newStatus]);
         return $newStatus;
-       
     }
 }
