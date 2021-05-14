@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <ul class="list-group py-3 cart-list">
+                    <ul class="list-group py-3 cart-list" id='cart-list'>
                         <li class="py-3 list-group-item">
                             <h2> Shopping Cart </h2>
                         </li>
@@ -89,7 +89,7 @@
             $('.delete-prod').on('submit', function(e) {
                 e.preventDefault();
 
-                console.log(e.target.children[2].value);
+                // console.log(e.target.children[2].value);
                 let prod_id = e.target.children[2].value;
 
                 $.ajax({
@@ -110,14 +110,18 @@
                                 $(`#total`).text("Total : " + data);
                                 let extraCharge = ((parseInt(data) * 18) / 100)
                                     .toFixed(2);
-                                //console.log( parseInt(data) + parseInt(extraCharge) + 50);
+                                console.log( $('#cart-list').children().length );
                                 let grossTotal = parseInt(data) + parseInt(
                                     extraCharge) + 50;
                                 $(`#gross-total`).text(`Gross Total : ₹` +
                                     grossTotal);
-                                if (data == 0) {
-                                    console.log( document.getElementById(`proceed`));
+                                if($('#cart-list').children().length == 1){
+                                    
+                                    $('#cart-list').html(`<li class="py-3 list-group-item">
+                            <h2> Shopping Cart </h2>
+                        </li><div class="alert alert-danger"> Cart is empty</div>`);
                                 }
+                                
                             }
                         });
                     }

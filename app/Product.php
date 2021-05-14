@@ -20,7 +20,7 @@ class Product extends Model
     public static function getFilteredProducts($id){
         return Product::join('categories', function ($join) {
             $join->on('products.id', '=', 'categories.prod_id');
-        })->select('*', 'products.id as id')->where('catName_id', $id)->paginate(2);
+        })->select('*', 'products.id as id')->where('catName_id', $id)->paginate(6);
     }
 
 }
